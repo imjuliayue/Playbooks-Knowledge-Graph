@@ -1,5 +1,7 @@
 from predicateExtractionFunctions import *
 
+import pandas as pd
+
 # FUNCTIONS --------------
 
 # saves 1d array to txt file
@@ -59,3 +61,9 @@ saveData("data/DI-R50_Data",processedPosts, 'DI-R50_Pre_Processed')
 processedPres = processStringtoList(PreDI, resultPres)
 saveData("data/DI-R50_Data",processedPres, 'DI-R50_Post_Processed')
 
+# ---------------------------
+
+
+
+# UNIQUIFY NAMES --------------
+# TODO: add function to the functions file.
