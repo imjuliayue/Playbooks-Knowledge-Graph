@@ -13,6 +13,8 @@ import pickle as pkl
 # from google.colab import drive
 
 import random
+
+import ast
 # -----------------------------------------
 
 # FUNCTIONS --------------------------------
@@ -53,16 +55,19 @@ def extraction(condition, context):
                         (config) The system denies access for the subject to the network.
                         You respond: 
                         FINAL ANSWER:
-                        [some x : everything, y : everything, z : everything | System[x] && Subject[y] && Network[z] && DeniesAccessTo[x,y,z],
-                          [System; Subject; Network; DeniesAccess],
-                          [x; y; z; x,y,z],
-                          [ x is a system;  y is a subject;  x denies access for y to z ]
+                        ["some x : everything, y : everything, z : everything | System[x] && Subject[y] && Network[z] && DeniesAccessTo[x,y,z]",
+                          ["System", "Subject", "Network"; "DeniesAccess"],
+                          ["x", "y", "z", "x,y,z"],
+                          [" x is a system", " y is a subject", " x denies access for y to z "]
                         ]
-                        Within each sublist, separate each element with semicolons!!!
                         NO nested predicates! E.g. something like Exists(Tool(x)) is NOT allowed.
                         About quantifiers: if statement applies to one object or has "the", it would be "some". and if statement applies to all objects then it's 'all')
                         do not use variables other than w, x, y, and z. Make sure they correspond to correct objects. Also try to surround variables with spaces in DESCRIPTIONS (" x ")
                         use reasoning, and be very careful with implies and quantifiers.
+                        Condition may have unnecessary information. Remove it. (E.g. "If a match is found, a detection log is generated for auditing or alerting purposes", remove "for auditing or alerting purposes"; only care that it's generated.)
+                        Condition may have examples. Remove it. (E.g. "A predefined response is triggered if verification fails, such as disabling devices or blocking operations", remove "such as disabling...")
+                        If anything else is unnecessary, remove it or simplify it.
+                        Do not change meaning of condition.
                         '''
       },
       {
@@ -107,18 +112,22 @@ def fixExtraction(condition, context, extraction):
                         (config) The system denies access for the subject to the network.
                         You respond: 
                         FINAL ANSWER:
-                        [some x : everything, y : everything, z : everything | System[x] && Subject[y] && Network[z] && DeniesAccessTo[x,y,z],
-                          [System; Subject; Network; DeniesAccess],
-                          [x; y; z; x,y,z],
-                          [ x is a system;  y is a subject;  x denies access for y to z ]
+                        ["some x : everything, y : everything, z : everything | System[x] && Subject[y] && Network[z] && DeniesAccessTo[x,y,z]",
+                          ["System", "Subject", "Network"; "DeniesAccess"],
+                          ["x", "y", "z", "x,y,z"],
+                          [" x is a system", " y is a subject", " x denies access for y to z "]
                         ]
-                        Within each sublist, separate each element with semicolons!!!
+                        Within the variables sublist, separate each element with semicolons!!!
                         NO nested predicates! E.g. something like Exists(Tool(x)) is NOT allowed.
                         About quantifiers: if statement applies to one object or has "the", it would be "some". and if statement applies to all objects then it's 'all')
                         About implications: if statement applies to only one TYPE of object, use implies (all x : everything | Baby[x] implies DrinksMilk[x], NOT all x : everything | Baby[x] && DrinksMilk[x])
                         do not use variables other than w, x, y, and z. Make sure they correspond to correct objects. Also try to surround variables with spaces in DESCRIPTIONS (" x ")
                         use reasoning, and be very careful with implies and quantifiers.
                         ---
+                        Condition may have unnecessary information. Remove it. (E.g. "If a match is found, a detection log is generated for auditing or alerting purposes", remove "for auditing or alerting purposes"; only care that it's generated.)
+                        Condition may have examples. Remove it. (E.g. "A predefined response is triggered if verification fails, such as disabling devices or blocking operations", remove "such as disabling...")
+                        If anything else is unnecessary, remove it or simplify it.
+                        Do not change meaning of condition.
                         provide reasoning and in a new line output your own extraction. Pay special attention to QUANTIFIERS, IMPLICATIONS, and variables or variable order.
                         <reasoning>
                         FINAL ANSWER:
@@ -137,6 +146,7 @@ def fixExtraction(condition, context, extraction):
 # ---
 
 def batchExtraction(conditions):
+  # conditions is a list of conditions, each condition is a list of [condition_name, condition_desc, condition_context]
   result = []
   i = 0
   for condition in conditions:
@@ -179,15 +189,11 @@ Preinds = np.array([123, 145, 287, 144, 124, 248, 247, 298, 317, 207, 242, 217, 
 def string_to_list(extraction):
   # extraction is the string: [logical expression, [pred1; pred2; ...], [var1; var2; ...], [descr1; descr2; ...]]
   # returns list of the form [logical expression, [pred1, pred2, ...], [var1, var2, ...], [descr1, descr2, ...]]
-  result = extraction.replace("]", "")
-  result = result.split('[')[1:]
-  if(len(result) != 4):
+  lst= ast.literal_eval(extraction)
+  if(len(lst) != 4):
+    print("Error: extraction string does not have 4 elements!")
     return None
-  result[0] = result[0].strip()
-  result[1] = [item.strip() for item in result[1].split(';')]
-  result[2] = [item.strip() for item in result[2].split(';')]
-  result[3] = [item.strip() for item in result[3].split(';')]
-  return result
+  return lst
 
 # ---
 
@@ -200,29 +206,36 @@ def processing_to_list(extraction_array,conditions):
   # - `result`
   result = []
   retry = []
-  retryInds = np.array([])
+  retryInds = []
   count=0
   for extraction in extraction_array:
 
     # turns extraction string into list
     res = string_to_list(extraction)
 
+    # append everything to result (even if None, aka failed parse)
     result.append(res)
     if(res is None):
+        # if parsing failed, append to retry and index to conditions
         retry.append(conditions[count])
-        retryInds = np.append(retryInds,count)
+        retryInds.append(count)
     count+=1
 
+  # remove empty strings from result
   for i in result:
+    # if i is None, skip
+    if(i is None):
+      continue
     i[1] = [j for j in i[1] if j != ""]
     i[2] = [j for j in i[2] if j != ""]
+  
   return result, retry, retryInds
 
 # ---
 
 # BULK turns string to list
 def processStringtoList(conditions, result):
-  # conditions is a list of actual conditions ([condition_name, condition_desc, condition_context])
+  # conditions is an NP ARRAY of actual conditions ([condition_name, condition_desc, condition_context])
   # result is a list of extraction strings ([logical expression, [pred1; pred2; ...], [var1; var2; ...], [descr1; descr2; ...]])
   #   NOT listified!
   indices = np.array(range(len(conditions)))
