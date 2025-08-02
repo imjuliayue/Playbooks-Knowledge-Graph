@@ -63,6 +63,10 @@ if LOADEXTRACTEDFLAG:
 assert len(resultPosts) == len(PostDI), "Postcondition extraction length mismatch"
 assert len(resultPres) == len(PreDI), "Precondition extraction length mismatch"
 
+# print(resultPres[0])
+# lst= ast.literal_eval(resultPres[0])
+
+
 processedPosts = processStringtoList(PostDI, resultPosts)
 saveData("data/DI-R50_Data",processedPosts, 'DI-R50_Pre_Processed')
 

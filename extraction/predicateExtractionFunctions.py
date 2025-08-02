@@ -184,7 +184,11 @@ def saveData(path, data, name):
 def string_to_list(extraction):
   # extraction is the string: [logical expression, [pred1; pred2; ...], [var1; var2; ...], [descr1; descr2; ...]]
   # returns list of the form [logical expression, [pred1, pred2, ...], [var1, var2, ...], [descr1, descr2, ...]]
-  lst= ast.literal_eval(extraction)
+  try:
+    lst= ast.literal_eval(extraction)
+  except (SyntaxError, ValueError):
+    return None
+  print("oop")
   if(len(lst) != 4):
     print("Error: extraction string does not have 4 elements!")
     return None
