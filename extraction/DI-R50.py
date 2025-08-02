@@ -116,7 +116,7 @@ for processed,condition in zip(processedPosts2, PostDI):
     processed.insert(0,condition.tolist())
     print(processed)
 saveData(f"data/{FOLDERNAME}",processedPosts2, 'DI-R50_Post_Processed')
-savePkl(f"data/{FOLDERNAME}",processedPosts, 'DI-R50_Post_Processed')
+savePkl(f"{FOLDERNAME}", 'DI-R50_Post_Processed',processedPosts)
 
 
 processedPres = processStringtoList(PreDI, resultPres)
@@ -127,7 +127,7 @@ for processed,condition in zip(processedPres2, PreDI):
     processed.insert(0,condition.tolist())
     print(processed)
 saveData(f"data/{FOLDERNAME}",processedPres2, 'DI-R50_Pre_Processed')
-savePkl(f"data/{FOLDERNAME}",processedPres, 'DI-R50_Pre_Processed')
+savePkl(f"{FOLDERNAME}", 'DI-R50_Pre_Processed',processedPres)
 
 # ---------------------------
 
@@ -139,8 +139,8 @@ savePkl(f"data/{FOLDERNAME}",processedPres, 'DI-R50_Pre_Processed')
 LOADPROCESSEDFLAG = False
 
 if LOADPROCESSEDFLAG:
-    processedPosts = loadPkl(f"data/{FOLDERNAME}", 'DI-R50_Post_Processed')
-    processedPres = loadPkl(f"data/{FOLDERNAME}", 'DI-R50_Pre_Processed')
+    processedPosts = loadPkl(f"{FOLDERNAME}", 'DI-R50_Post_Processed')
+    processedPres = loadPkl(f"{FOLDERNAME}", 'DI-R50_Pre_Processed')
 
 d = {}
 
@@ -149,12 +149,18 @@ print(processedPosts[0][1][0])
 nextInd = uniquifyNames(processedPosts, 0,d)
 nextInd = uniquifyNames(processedPres, nextInd,d)
 
-print(processedPosts)
-print(processedPres)
+for processed,condition in zip(processedPosts, PostDI):
+    processed.insert(0,condition.tolist())
+    print(processed)
+
+for processed,condition in zip(processedPres, PreDI):
+    processed.insert(0,condition.tolist())
+    print(processed)
+
 
 # Save processed data with unique names
 saveData(f"data/{FOLDERNAME}",processedPosts, 'DI-R50_Post_Unique')
 saveData(f"data/{FOLDERNAME}",processedPres, 'DI-R50_Pre_Unique')
-savePkl(f"data/{FOLDERNAME}",processedPosts, 'DI-R50_Post_Unique')
-savePkl(f"data/{FOLDERNAME}",processedPres, 'DI-R50_Pre_Unique')
+savePkl(f"{FOLDERNAME}", 'DI-R50_Post_Unique',processedPosts)
+savePkl(f"{FOLDERNAME}", 'DI-R50_Pre_Unique',processedPres)
 
