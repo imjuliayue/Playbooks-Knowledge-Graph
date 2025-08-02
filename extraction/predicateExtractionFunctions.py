@@ -181,6 +181,14 @@ def saveData(path, data, name):
 
 # ---
 
+def loadData(path, name):
+  # path is the path to load the data from (can include '../'), W.R.T. WHERE RUNNING SCRIPT
+  # name is the name of the file to load
+  # returns a list of lists, each list is [name, descr1, descr2, ...]
+  with open(f'{path}/{name}.csv', 'r') as f:
+      reader = csv.reader(f)
+      return [row for row in reader]
+
 def string_to_list(extraction):
   # extraction is the string: [logical expression, [pred1; pred2; ...], [var1; var2; ...], [descr1; descr2; ...]]
   # returns list of the form [logical expression, [pred1, pred2, ...], [var1, var2, ...], [descr1, descr2, ...]]

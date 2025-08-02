@@ -95,10 +95,10 @@ assert len(resultPres) == len(PreDI), "Precondition extraction length mismatch"
 
 
 processedPosts = processStringtoList(PostDI, resultPosts)
-saveData("data/DI-R50_Data",processedPosts, 'DI-R50_Pre_Processed')
+saveData(f"data/{FOLDERNAME}",processedPosts, 'DI-R50_Post_Processed')
 
 processedPres = processStringtoList(PreDI, resultPres)
-saveData("data/DI-R50_Data",processedPres, 'DI-R50_Post_Processed')
+saveData(f"data/{FOLDERNAME}",processedPres, 'DI-R50_Pre_Processed')
 
 # ---------------------------
 
@@ -106,4 +106,10 @@ saveData("data/DI-R50_Data",processedPres, 'DI-R50_Post_Processed')
 
 # # UNIQUIFY NAMES --------------
 # # TODO: add function to the functions file.
+
+LOADPROCESSEDFLAG = False
+
+if LOADPROCESSEDFLAG:
+    processedPosts = loadData(f"data/{FOLDERNAME}", 'DI-R50_Post_Processed')
+    processedPres = loadData(f"data/{FOLDERNAME}", 'DI-R50_Pre_Processed')
 
