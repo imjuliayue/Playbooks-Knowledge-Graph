@@ -6,6 +6,10 @@ import json
 
 import re
 
+import copy
+
+import pickle as pkl
+
 # FUNCTIONS --------------
 
 # saves 1d array to txt file
@@ -19,6 +23,16 @@ def loadTxt(FOLDERNAME, FILENAME):
     # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
     with open(f"data/{FOLDERNAME}/{FILENAME}.json", 'r') as f:
         return json.load(f)
+    
+def savePkl(FOLDERNAME, FILENAME, DATA):
+    # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
+    with open(f"data/{FOLDERNAME}/{FILENAME}.pkl", 'wb') as f:
+        pkl.dump(DATA, f)
+
+def loadPkl(FOLDERNAME, FILENAME):
+    # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
+    with open(f"data/{FOLDERNAME}/{FILENAME}.pkl", 'rb') as f:
+        return pkl.load(f)
     
 def uniquifyNames(processed, i, d):
     # processed is a python list of [[logical expression, [pred1, pred2, ...], [var1, var2, ...], [descr1, descr2, ...]],...]
@@ -40,7 +54,7 @@ def uniquifyNames(processed, i, d):
             x[1][j] = pred
             print(pred)
             escaped_predOG = re.escape(predOG)
-            newexpr = re.sub(rf"(?<![a-zA-Z])({escaped_predOG})(\()", pred + "(", x[0])
+            newexpr = re.sub(rf"(?<![a-zA-Z])({escaped_predOG})(\[)", pred + "[", x[0])
             x[0] = newexpr
     return i
     
@@ -95,10 +109,25 @@ assert len(resultPres) == len(PreDI), "Precondition extraction length mismatch"
 
 
 processedPosts = processStringtoList(PostDI, resultPosts)
-saveData(f"data/{FOLDERNAME}",processedPosts, 'DI-R50_Post_Processed')
+
+processedPosts2 = copy.deepcopy(processedPosts)
+
+for processed,condition in zip(processedPosts2, PostDI):
+    processed.insert(0,condition.tolist())
+    print(processed)
+saveData(f"data/{FOLDERNAME}",processedPosts2, 'DI-R50_Post_Processed')
+savePkl(f"data/{FOLDERNAME}",processedPosts, 'DI-R50_Post_Processed')
+
 
 processedPres = processStringtoList(PreDI, resultPres)
-saveData(f"data/{FOLDERNAME}",processedPres, 'DI-R50_Pre_Processed')
+
+processedPres2 = copy.deepcopy(processedPres)
+
+for processed,condition in zip(processedPres2, PreDI):
+    processed.insert(0,condition.tolist())
+    print(processed)
+saveData(f"data/{FOLDERNAME}",processedPres2, 'DI-R50_Pre_Processed')
+savePkl(f"data/{FOLDERNAME}",processedPres, 'DI-R50_Pre_Processed')
 
 # ---------------------------
 
@@ -110,6 +139,22 @@ saveData(f"data/{FOLDERNAME}",processedPres, 'DI-R50_Pre_Processed')
 LOADPROCESSEDFLAG = False
 
 if LOADPROCESSEDFLAG:
-    processedPosts = loadData(f"data/{FOLDERNAME}", 'DI-R50_Post_Processed')
-    processedPres = loadData(f"data/{FOLDERNAME}", 'DI-R50_Pre_Processed')
+    processedPosts = loadPkl(f"data/{FOLDERNAME}", 'DI-R50_Post_Processed')
+    processedPres = loadPkl(f"data/{FOLDERNAME}", 'DI-R50_Pre_Processed')
+
+d = {}
+
+print(processedPosts[0][1][0])
+
+nextInd = uniquifyNames(processedPosts, 0,d)
+nextInd = uniquifyNames(processedPres, nextInd,d)
+
+print(processedPosts)
+print(processedPres)
+
+# Save processed data with unique names
+saveData(f"data/{FOLDERNAME}",processedPosts, 'DI-R50_Post_Unique')
+saveData(f"data/{FOLDERNAME}",processedPres, 'DI-R50_Pre_Unique')
+savePkl(f"data/{FOLDERNAME}",processedPosts, 'DI-R50_Post_Unique')
+savePkl(f"data/{FOLDERNAME}",processedPres, 'DI-R50_Pre_Unique')
 
