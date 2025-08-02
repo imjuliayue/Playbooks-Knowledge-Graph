@@ -4,6 +4,8 @@ import pandas as pd
 
 import json
 
+import re
+
 # FUNCTIONS --------------
 
 # saves 1d array to txt file
@@ -17,6 +19,31 @@ def loadTxt(FOLDERNAME, FILENAME):
     # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
     with open(f"data/{FOLDERNAME}/{FILENAME}.json", 'r') as f:
         return json.load(f)
+    
+def uniquifyNames(processed, i, d):
+    # processed is a python list of [[logical expression, [pred1, pred2, ...], [var1, var2, ...], [descr1, descr2, ...]],...]
+    # i is the starting index for nonunique names
+    # d is the dictionary of all unique names
+    # processed is modified in place
+    # - turns all of the names in the list to a unique one.
+    # returns next index for nonunique names
+    for x in processed:
+        for j in range(len(x[1])):
+            predOG = x[1][j]
+            pred = predOG.strip().rstrip(",.!?")
+            if(d.get(pred) == None):
+                d[pred] = 1
+            else:
+                pred = pred + str(i)
+                i+=1
+                d[pred] = 1
+            x[1][j] = pred
+            print(pred)
+            escaped_predOG = re.escape(predOG)
+            newexpr = re.sub(rf"(?<![a-zA-Z])({escaped_predOG})(\()", pred + "(", x[0])
+            x[0] = newexpr
+    return i
+    
     
 # ------------------------
 
@@ -79,3 +106,4 @@ saveData("data/DI-R50_Data",processedPres, 'DI-R50_Post_Processed')
 
 # # UNIQUIFY NAMES --------------
 # # TODO: add function to the functions file.
+
