@@ -2,13 +2,22 @@ from predicateExtractionFunctions import *
 
 import pandas as pd
 
+import json
+
 # FUNCTIONS --------------
 
 # saves 1d array to txt file
 def saveTxt(FOLDERNAME, FILENAME, ARRAY):
     # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
-    np.savetxt(f'data/{FOLDERNAME}/{FILENAME}', np.array(ARRAY).reshape((-1,1)),fmt="%s")
+    with open(f"data/{FOLDERNAME}/{FILENAME}.json", 'w') as f:
+        json.dump(ARRAY, f)
+    # np.savetxt(f'data/{FOLDERNAME}/{FILENAME}', np.array(ARRAY).reshape((-1,1)),fmt="%s")
 
+def loadTxt(FOLDERNAME, FILENAME):
+    # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
+    with open(f"data/{FOLDERNAME}/{FILENAME}.json", 'r') as f:
+        return json.load(f)
+    
 # ------------------------
 
 # DATA ORGANIZATION --------------
@@ -32,22 +41,21 @@ PreDI = valuesPrecondition[Preinds]
 # Extract to string lists (not processed) and save them
 FOLDERNAME = "DI-R50_Data"
 
-resultPosts = np.array(batchExtraction(PostDI))
-saveTxt(FOLDERNAME, "DI-R50_Pre_StringExtract.txt", resultPosts)
-resultPres = np.array(batchExtraction(PreDI))
-saveTxt(FOLDERNAME, "DI-R50_Post_StringExtract.txt", resultPres)
+# resultPosts = np.array(batchExtraction(PostDI))
+# saveTxt(FOLDERNAME, "DI-R50_Post_StringExtract", resultPosts.tolist())
+# resultPres = np.array(batchExtraction(PreDI))
+# saveTxt(FOLDERNAME, "DI-R50_Pre_StringExtract", resultPres.tolist())
 
 # ---------------------------
 
 
-
 # PROCESS DATA --------------
 
-LOADEXTRACTEDFLAG = False
+LOADEXTRACTEDFLAG = True
 
 if LOADEXTRACTEDFLAG:
-    resultPosts = np.loadtxt(f'data/{FOLDERNAME}/DI-R50_Pre_StringExtract.txt', dtype=str)
-    resultPres = np.loadtxt(f'data/{FOLDERNAME}/DI-R50_Post_StringExtract.txt', dtype=str)
+    resultPres = loadTxt(FOLDERNAME, "DI-R50_Pre_StringExtract")
+    resultPosts = loadTxt(FOLDERNAME, "DI-R50_Post_StringExtract")
 
 # Process the extracted strings to lists
 # Save processed data
@@ -65,5 +73,5 @@ saveData("data/DI-R50_Data",processedPres, 'DI-R50_Post_Processed')
 
 
 
-# UNIQUIFY NAMES --------------
-# TODO: add function to the functions file.
+# # UNIQUIFY NAMES --------------
+# # TODO: add function to the functions file.

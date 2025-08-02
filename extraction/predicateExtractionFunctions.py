@@ -63,6 +63,7 @@ def extraction(condition, context):
                         Condition may have examples. Remove it. (E.g. "A predefined response is triggered if verification fails, such as disabling devices or blocking operations", remove "such as disabling...")
                         If anything else is unnecessary, remove it or simplify it.
                         Do not change meaning of condition.
+                        You MUST include "FINAL ANSWER:" in your response!
                         '''
       },
       {
@@ -77,8 +78,10 @@ def extraction(condition, context):
 # ---
 
 def extractionFinalResult(output):
-    x = output.split("ANSWER:\n")
-    return x[1]
+    x = output.split("ANSWER:")
+    if(len(x) < 2):
+       print(output)
+    return x[1].strip("\n")
 
 # ---
 
@@ -112,7 +115,6 @@ def fixExtraction(condition, context, extraction):
                           ["x", "y", "z", "x,y,z"],
                           [" x is a system", " y is a subject", " x denies access for y to z "]
                         ]
-                        Within the variables sublist, separate each element with semicolons!!!
                         NO nested predicates! E.g. something like Exists(Tool(x)) is NOT allowed.
                         About quantifiers: if statement applies to one object or has "the", it would be "some". and if statement applies to all objects then it's 'all')
                         About implications: if statement applies to only one TYPE of object, use implies (all x : everything | Baby[x] implies DrinksMilk[x], NOT all x : everything | Baby[x] && DrinksMilk[x])
@@ -125,6 +127,7 @@ def fixExtraction(condition, context, extraction):
                         Do not change meaning of condition.
                         KEEP PREDICATES AND DESCRIPTIONS GENERIC AND SIMPLE
                         provide reasoning and in a new line output your own extraction. Pay special attention to QUANTIFIERS, IMPLICATIONS, and variables or variable order.
+                        You MUST include "FINAL ANSWER:" in your response!
                         <reasoning>
                         FINAL ANSWER:
                         <extraction>
