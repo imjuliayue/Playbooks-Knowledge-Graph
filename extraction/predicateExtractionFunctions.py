@@ -106,7 +106,7 @@ def fixExtraction(condition, context, extraction):
                         If says something "may" or "could" happen, assume it will happen
                         (e.g. `...the process may be terminated` becomes `...the process will be terminated".
                         Always use quantifiers: "all" is for all, "some" is exists, "no" is none exist, "one" is exactly one exists (use only if it's really the only one), "lone" is 0 or 1.
-                        Write logical expression in alloy formal logic modelling syntax. NO facts or signatures, ONLY predicates! Keep names and descriptions generic (have them work for wide range of objects). E.g. if x is an operational firewall, do Operational(x) and Firewall(x), NOT OperationalFirewall(x)
+                        Write logical expression in alloy formal logic modelling syntax. NO facts or signatures, ONLY predicates! Keep names and descriptions GENERIC and SIMPLE (have them work for wide range of objects). E.g. if x is an operational firewall, do Operational(x) and Firewall(x), NOT OperationalFirewall(x)
                         Return list containing: 1. logical expression, 2. list of singular predicate names, 3. list of corresponding variable input letters, 4. list of corresponding predicate descriptions (without predicate name), SIMPLE as possible.
                         EXPLAIN YOUR REASONING THROUGHOUT. On new line, output final answer alone, no explanation/extra text. Example: 
                         (config) The system denies access for the subject to the network.
@@ -128,6 +128,7 @@ def fixExtraction(condition, context, extraction):
                         Condition may have examples. Remove it. (E.g. "A predefined response is triggered if verification fails, such as disabling devices or blocking operations", remove "such as disabling...")
                         If anything else is unnecessary, remove it or simplify it.
                         Do not change meaning of condition.
+                        KEEP PREDICATES AND DESCRIPTIONS GENERIC AND SIMPLE
                         provide reasoning and in a new line output your own extraction. Pay special attention to QUANTIFIERS, IMPLICATIONS, and variables or variable order.
                         <reasoning>
                         FINAL ANSWER:
@@ -178,11 +179,6 @@ def saveData(data, name):
   with open(f'{name}.csv', 'w', newline='') as f:
       writer = csv.writer(f)
       writer.writerows(data)
-
-# indices of D50 in full arrays.
-Postinds = np.array([496, 189, 462, 346, 426, 353, 406, 484, 399, 407, 284, 372, 387, 480, 255, 190, 425, 350, 398, 432, 471, 376, 302, 201, 458, 345, 305, 183, 279, 457, 388, 269, 300, 420, 224, 355, 296, 447, 499, 465, 205, 414, 321, 297, 476, 437, 368, 498, 210, 287])
-Preinds = np.array([123, 145, 287, 144, 124, 248, 247, 298, 317, 207, 242, 217, 319, 201, 288, 196, 150, 220, 153, 164, 294, 154, 336, 262, 184, 301, 191, 245, 161, 379, 252, 321, 358, 290, 141, 147, 194, 324, 125, 188, 282, 186, 344, 228, 223, 179, 255, 235, 175, 185])
-
 
 # ---
 

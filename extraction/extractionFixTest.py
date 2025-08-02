@@ -4,7 +4,7 @@ x = [['some x : everything, y : everything | Registrar[x] && DomainRegistration[
      ['some x : everything | Domain[x] && NoLongerUsedForMaliciousCommunications[x]', ['Domain', 'NoLongerUsedForMaliciousCommunications'], ['x', 'x'], [' x is a domain', ' x can no longer be used for malicious communications']]
 ]
 
-saveData(x, 'test')
+# saveData(x, 'test')
 
 # openai_client()
 
