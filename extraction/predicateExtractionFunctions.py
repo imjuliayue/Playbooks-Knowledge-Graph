@@ -173,10 +173,11 @@ def batchExtraction(conditions):
 
 # ---
 
-def saveData(data, name):
+def saveData(path, data, name):
+  # path is the path to save the data to (can include '../'), W.R.T. WHERE RUNNING SCRIPT
   # data is in the form of [[name, descr1, descr2, ...], [name2, descr1, descr2, ...], ...]
   # saves as CSV file with name as the first column and descriptions as the rest
-  with open(f'{name}.csv', 'w', newline='') as f:
+  with open(f'{path}/{name}.csv', 'w', newline='') as f:
       writer = csv.writer(f)
       writer.writerows(data)
 
