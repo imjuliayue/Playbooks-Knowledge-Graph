@@ -4,6 +4,6 @@ import edu.mit.csail.sdg.parser.CompUtil;
 import edu.mit.csail.sdg.ast.*;
 import edu.mit.csail.sdg.translator.*;
 
-public class alloy {
+public class AlloyTest {
     
 }
