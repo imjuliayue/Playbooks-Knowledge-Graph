@@ -13,10 +13,14 @@
 
 ### DI-R50_Data FOLDER
 
+*Files coresponding to the randomly selected 50 Detect and Isolate techniques*
+
 `DI-R50_Post-StringExtract.json` --- 1 row, 1 column
 - All raw strings (not processed) combined into a single list ([["Expression", ["Predicates"...], ["Variables"...], ["Descriptions"]],...])
 
 `DI-R50_Pre-StringExtract.json` --- ^^^
+
+
 
 
 `DI-R50_Post-Processed.csv` --- n rows, 5 columns
