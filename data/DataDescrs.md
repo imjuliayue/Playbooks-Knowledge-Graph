@@ -26,4 +26,29 @@
 `DI-R50_Post-Processed.csv` --- n rows, 5 columns
 - Processed strings, each row corresponds to: 1) [Cond ID, Cond Descr, Context], 2) Expression, 3) [Predicates], 4) [Variables], and 5) [Descriptions]
 
-`DI-R50_Post-Processed.csv` --- ^^^
+`DI-R50_Pre-Processed.csv` --- ^^^
+
+
+
+
+`DI-R50_Post_Processed.pkl` --- n rows, 4 columns
+- Processed strings, each row corresponds to: 1) Expressions, 2) [Predicates], 3) [Variables], and 4) [Descriptions]
+
+`DI-R50_Pre_Processed.pkl` --- ^^^
+
+
+
+`DI-R50_Post_Unique.csv` --- n rows, 5 columns
+- Processed strings, each row corresponds to: 1) Expressions, 2) [Predicates], 3) [Variables], and 4) [Descriptions]
+- CAVEAT: the predicates are ALL unique names (added number to end)
+
+`DI-R50_Pre_Unique.csv` --- ^^^
+
+
+
+`DI-R50_Post_Unique.pkl` --- n rows, 5 columns
+- Processed strings, each row corresponds to: 1) Expressions, 2) [Predicates], 3) [Variables], and 4) [Descriptions]
+- CAVEAT: the predicates are ALL unique names (added number to end)
+
+`DI-R50_Pre_Unique.pkl` --- ^^^
+
