@@ -120,3 +120,65 @@ def cleanForCluster(condDI):
       cond.append(cleanedDescr)
       
       
+def clustering_clique_method(similarity_matrix, predicate_list, threshold=0.9):
+    n = len(predicate_list)
+    clustered = [False] * n
+    clusters = []
+
+    while not all(clustered):
+        # create clusters
+        candidate_clusters = []
+        for i in range(n):
+          if clustered[i]:
+              continue
+          # new cluster
+          current_cluster = [i]
+          while True:
+              best_candidate = -1
+              best_min_similarity = -1
+              for j in range(n):
+                  if clustered[j] or j in current_cluster:
+                      continue
+                  similarities = [similarity_matrix[j][member] for member in current_cluster]
+                  min_similarity = min(similarities)
+                  if min_similarity >= threshold and min_similarity > best_min_similarity:
+                      valid_clique = True
+                      # check clique is valid
+                      for member1 in current_cluster:
+                        for member2 in current_cluster:
+                            if similarity_matrix[member1][member2] < threshold:
+                                valid_clique = False
+                                break
+                        if not valid_clique:
+                            break
+                      # check sim with rest of cluster
+                      if valid_clique:
+                          for member in current_cluster:
+                              if similarity_matrix[j][member] < threshold:
+                                  valid_clique = False
+                                  break
+                      if valid_clique:
+                          best_min_similarity = min_similarity
+                          best_candidate = j
+              if best_candidate != -1:
+                  current_cluster.append(best_candidate)
+              else:
+                  break
+          candidate_clusters.append(current_cluster)
+
+        # get largest clique
+        if candidate_clusters:
+            largest_clique = max(candidate_clusters, key=len)
+            # remove predicates in largest clique from pool
+            for member in largest_clique:
+                clustered[member] = True
+
+            clusters.append(largest_clique)
+        else:
+            # if no clusters, append as single clusters
+            for i in range(n):
+                if not clustered[i]:
+                    clusters.append([i])
+                    clustered[i] = True
+
+    return clusters
