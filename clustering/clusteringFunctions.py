@@ -141,69 +141,88 @@ def get_pred_list(pkl):
 
 # ---
 
+def output_as_csv(clusters, names, descr, sim_matrix):
+  csv_data = []
+  for i, cluster in enumerate(clusters):
+    first = cluster[0]
+    cluster_size = len(cluster)
+    for node_idx in cluster:
+        predicate = names[node_idx]
+        predicate_desc = descr[node_idx]
+        similarity_score = sim_matrix[node_idx][first]
+        csv_data.append([i+1, predicate, predicate_desc, cluster_size, similarity_score])
 
+  output_df = pd.DataFrame(csv_data, columns=['cluster_number', 'predicate', 'predicate_description', 'cluster_size', 'similarity_score'])
+  output_df.to_csv('clustering_results_0.92.csv', index=False)
+  return
+
+# ---
+
+def find_max_sim_pred_index(sim_matrix, baseline_index, clustered, threshold):
+  max_score = 0
+  max_index = -1
+  for i in range(len(sim_matrix[baseline_index])):
+    if (i != baseline_index) and (not clustered[i]) and (sim_matrix[baseline_index][i] > max_score) and (sim_matrix[baseline_index][i] > threshold):
+      max_index = i
+      max_score = sim_matrix[baseline_index][i]
+  return max_index
+
+# ---
+
+def find_most_sim_to_cluster(sim_matrix, current_cluster, clustered, threshold):
+  max_score = 0
+  max_index = -1
+  for i in range(len(sim_matrix)):
+    temp_score = 0
+    for pred_index in current_cluster:
+      if (i not in current_cluster) and (not clustered[i]) and (sim_matrix[i][pred_index] > max_score) and (sim_matrix[i][pred_index] > threshold):
+        temp_score += sim_matrix[i][pred_index]
+    if temp_score / len(current_cluster) > max_score:
+      max_score = temp_score / len(current_cluster)
+      max_index = i
+  return max_index
+
+# ---
+
+def sim_to_all_pred_in_cluster(sim_matrix, baseline_index, current_cluster, threshold):
+  for pred_index in current_cluster:
+    if sim_matrix[pred_index][baseline_index] < threshold:
+      return False
+  return True
 
 # ---
       
-def clustering_clique_method(similarity_matrix, predicate_list, threshold=0.9):
+def clustering_clique_method(sim_matrix, predicate_list, threshold=0.92):
     n = len(predicate_list)
     clustered = [False] * n
-    clusters = []
+    temp_clustered = clustered.copy()
+    final_clusters = []
 
     while not all(clustered):
-        # create clusters
-        candidate_clusters = []
-        for i in range(n):
-          if clustered[i]:
-              continue
-          # new cluster
+      candidate_clusters = []
+      for i in range(n):
+        if not temp_clustered[i]:
+          # create new cluster
           current_cluster = [i]
-          while True:
-              best_candidate = -1
-              best_min_similarity = -1
-              for j in range(n):
-                  if clustered[j] or j in current_cluster:
-                      continue
-                  similarities = [similarity_matrix[j][member] for member in current_cluster]
-                  min_similarity = min(similarities)
-                  if min_similarity >= threshold and min_similarity > best_min_similarity:
-                      valid_clique = True
-                      # check clique is valid
-                      for member1 in current_cluster:
-                        for member2 in current_cluster:
-                            if similarity_matrix[member1][member2] < threshold:
-                                valid_clique = False
-                                break
-                        if not valid_clique:
-                            break
-                      # check sim with rest of cluster
-                      if valid_clique:
-                          for member in current_cluster:
-                              if similarity_matrix[j][member] < threshold:
-                                  valid_clique = False
-                                  break
-                      if valid_clique:
-                          best_min_similarity = min_similarity
-                          best_candidate = j
-              if best_candidate != -1:
-                  current_cluster.append(best_candidate)
-              else:
-                  break
+          temp_clustered[i] = True
+          # add most similar not yet clustered predicate
+          most_sim_pred_index = find_max_sim_pred_index(sim_matrix, i, temp_clustered, threshold)
+          while most_sim_pred_index != -1:
+            temp_clustered[most_sim_pred_index] = True
+            current_cluster.append(most_sim_pred_index)
+
+            most_sim_pred_index = find_most_sim_to_cluster(sim_matrix, current_cluster, temp_clustered, threshold)
+            # for j in range(n):
+            #   if not temp_clustered[j] and sim_to_all_pred_in_cluster(sim_matrix, j, current_cluster, threshold):
+            #     temp_clustered[j] = True
+            #     current_cluster.append(j)
           candidate_clusters.append(current_cluster)
-
-        # get largest clique
-        if candidate_clusters:
-            largest_clique = max(candidate_clusters, key=len)
-            # remove predicates in largest clique from pool
-            for member in largest_clique:
-                clustered[member] = True
-
-            clusters.append(largest_clique)
-        else:
-            # if no clusters, append as single clusters
-            for i in range(n):
-                if not clustered[i]:
-                    clusters.append([i])
-                    clustered[i] = True
-
-    return clusters
+      
+      largest_cluster = max(candidate_clusters, key=len)
+      for i in largest_cluster:
+        clustered[i] = True
+      final_clusters.append(largest_cluster)
+      temp_clustered = clustered.copy()
+      
+    
+    return final_clusters
