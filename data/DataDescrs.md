@@ -2,7 +2,7 @@
 
 -----------------------
 
-### ROOT
+## ROOT
 
 `PostconditionsWTechDescr.csv` --- n rows, 3 columns
 - rows containing: Postcondition ID, Postcondition Description, Technique Description
@@ -11,7 +11,9 @@
 
 ------------------------
 
-### DI-R50_Data FOLDER
+## DI-R50_Data FOLDER
+
+### Extraction SUBFOLDER
 
 *Files coresponding to the randomly selected 50 Detect and Isolate techniques*
 
@@ -52,3 +54,6 @@
 
 `DI-R50_Pre_Unique.pkl` --- ^^^
 
+### Clustering SUBFOLDER
+`PostDI-R50_embeddings.txt` --- p rows, 1 column
+- 

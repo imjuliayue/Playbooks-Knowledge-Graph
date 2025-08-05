@@ -63,6 +63,7 @@ def extraction(condition, context):
                         Condition may have examples. Remove it. (E.g. "A predefined response is triggered if verification fails, such as disabling devices or blocking operations", remove "such as disabling...")
                         If anything else is unnecessary, remove it or simplify it.
                         Do not change meaning of condition.
+                        IN PREDICATE LIST, EACH PREDICATE CORRESPONDS TO ONLY ONE DESCRIPTION AND ONE LIST OF VARIABLES.
                         You MUST include "FINAL ANSWER:" in your response!
                         '''
       },
@@ -78,9 +79,11 @@ def extraction(condition, context):
 # ---
 
 def extractionFinalResult(output):
+    # Returns None if the extraction does not contain "ANSWER:"
     x = output.split("ANSWER:")
     if(len(x) < 2):
-       print(output)
+       print("retry (no 'ANSWER:')")
+       return None
     return x[1].strip("\n")
 
 # ---
@@ -127,7 +130,8 @@ def fixExtraction(condition, context, extraction):
                         Do not change meaning of condition.
                         KEEP PREDICATES AND DESCRIPTIONS GENERIC AND SIMPLE
                         provide reasoning and in a new line output your own extraction. Pay special attention to QUANTIFIERS, IMPLICATIONS, and variables or variable order.
-                        You MUST include "FINAL ANSWER:" in your response!
+                        IN PREDICATE LIST, EACH PREDICATE CORRESPONDS TO ONLY ONE DESCRIPTION AND ONE LIST OF VARIABLES.
+                        You MUST include "FINAL ANSWER:" in your response, NO BOLD OR ASTERISKS!
                         <reasoning>
                         FINAL ANSWER:
                         <extraction>
@@ -156,9 +160,14 @@ def batchExtraction(conditions):
 
     # remove reasoning, get only extraction
     extractionResult = extractionFinalResult(res)
+    while(extractionResult == None):
+      extractionResult = extractionFinalResult(res)
+       
 
     # fix extraction
     res = fixExtraction(condition[1], condition[2], extractionResult)
+    while(res == None):
+      res = fixExtraction(condition[1], condition[2], extractionResult)
     
     # remove reasoning, get only extraction
     res = extractionFinalResult(res)
@@ -200,6 +209,9 @@ def string_to_list(extraction):
   if(len(lst) != 4):
     print("Error: extraction string does not have 4 elements!")
     return None
+  if(len(lst[1]) != len(lst[2]) or len(lst[1]) != len(lst[3])):
+     print("ERROR: length of pred, var, and descr not equal")
+     return None
   return lst
 
 # ---

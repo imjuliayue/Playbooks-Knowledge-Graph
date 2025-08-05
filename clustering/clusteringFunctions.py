@@ -49,8 +49,8 @@ def getEmbeds(values):
   i = 0
   for item in values:
     embed = get_embed(item)
-    if(i % 500 == 0):
-        print(i)
+    # if(i % 500 == 0):
+    print(i)
     i+=1
     embeds.append(embed)
   return np.array(embeds)
@@ -98,7 +98,7 @@ def savePkl(FOLDERNAME, FILENAME, DATA):
 
 def loadPkl(FOLDERNAME, FILENAME):
     # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
-    with open(f"../data/{FOLDERNAME}/{FILENAME}.pkl", 'rb') as f:
+    with open(f"data/{FOLDERNAME}/{FILENAME}.pkl", 'rb') as f:
         return pkl.load(f)
     
 # ---

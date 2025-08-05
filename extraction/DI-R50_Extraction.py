@@ -80,12 +80,13 @@ PreDI = valuesPrecondition[Preinds]
 # EXTRACT DATA --------------
 
 # Extract to string lists (not processed) and save them
-FOLDERNAME = "DI-R50_Data"
+FOLDERNAMEOG = "DI-R50_Data/Extraction"
+FOLDERNAME = "DI-R50_Data/Extraction"
 
 # resultPosts = np.array(batchExtraction(PostDI))
-# saveTxt(FOLDERNAME, "DI-R50_Post_StringExtract", resultPosts.tolist())
+# saveTxt(FOLDERNAME, "DI-R50_Post_StringExtract2", resultPosts.tolist())
 # resultPres = np.array(batchExtraction(PreDI))
-# saveTxt(FOLDERNAME, "DI-R50_Pre_StringExtract", resultPres.tolist())
+# saveTxt(FOLDERNAME, "DI-R50_Pre_StringExtract2", resultPres.tolist())
 
 # ---------------------------
 
@@ -95,8 +96,8 @@ FOLDERNAME = "DI-R50_Data"
 LOADEXTRACTEDFLAG = True
 
 if LOADEXTRACTEDFLAG:
-    resultPres = loadTxt(FOLDERNAME, "DI-R50_Pre_StringExtract")
-    resultPosts = loadTxt(FOLDERNAME, "DI-R50_Post_StringExtract")
+    resultPres = loadTxt(FOLDERNAMEOG, "DI-R50_Pre_StringExtract")
+    resultPosts = loadTxt(FOLDERNAMEOG, "DI-R50_Post_StringExtract")
 
 # Process the extracted strings to lists
 # Save processed data
@@ -143,8 +144,6 @@ if LOADPROCESSEDFLAG:
     processedPres = loadPkl(f"{FOLDERNAME}", 'DI-R50_Pre_Processed')
 
 d = {}
-
-print(processedPosts[0][1][0])
 
 nextInd = uniquifyNames(processedPosts, 0,d)
 nextInd = uniquifyNames(processedPres, nextInd,d)
