@@ -3,7 +3,7 @@ from clusteringFunctions import *
 # FLAGS AND INITIAL VALUES -----------------
 FOLDEREXTRACT = "DI-R50_Data/Extraction"
 FOLDERNAME = "DI-R50_Data/Clustering"
-EMBED_FLAG = True
+EMBED_FLAG = False
 
 # LOAD PICKLES ----------------------------
 # [condID, condDescr, techDescr], log expr, [preds], [vars], [predDescrs]
@@ -33,6 +33,10 @@ print(postPredCDescrs[0:5])
 postPredDescrs = [item for cond in postDI for item in cond[4]]
 prePredDescrs = [item for cond in preDI for item in cond[4]]
 
+# predicate variables
+postPredVars = [item for cond in postDI for item in cond[3]]
+prePredVars = [item for cond in preDI for item in cond[3]]
+
 print(postPredDescrs[0:5])
 
 print(len(postPredCDescrs),len(postPredDescrs),len(postPredNames))
@@ -58,7 +62,7 @@ testPre = [[float(x) for x in arr] for arr in testPre]
 
 all = []
 
-for x in zip(postPredNames + prePredNames, postPredDescrs + prePredDescrs, postPredCDescrs + prePredCDescrs, testPost + testPre):
+for x in zip(postPredNames + prePredNames, postPredDescrs + prePredDescrs, postPredCDescrs + prePredCDescrs, postPredVars + prePredVars, testPost + testPre):
     all.append(list(x))
 
 savePkl(FOLDERNAME, "DI-R50_CLUSTER_READY_ALL", all)
