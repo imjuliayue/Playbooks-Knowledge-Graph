@@ -126,6 +126,7 @@ def cleanForCluster(condDI):
 def get_pred_list(pkl):
     names = []
     descr = []
+    variables = []
     embeds = []
 
     for i in range(len(pkl)):
@@ -134,14 +135,16 @@ def get_pred_list(pkl):
         # index 1 contains predicate descr (with vars)
         # index 2 contains predicate descr (withOUT vars)
         descr.append(pkl[i][1])
-        # index 3 contains embedding
-        embeds.append(pkl[i][3])
+        # index 3 contains predicate vars
+        variables.append(pkl[i][3])
+        # index 4 contains embedding
+        embeds.append(pkl[i][4])
     cosine_sim_matrix = cosine_similarity(np.array(embeds))
-    return (np.array(names), np.array(descr), cosine_sim_matrix)
+    return (np.array(names), np.array(descr), np.array(variables), cosine_sim_matrix)
 
 # ---
 
-def output_as_csv(clusters, names, descr, sim_matrix):
+def output_as_csv(clusters, names, descr, variables, threshold):
   csv_data = []
   for i, cluster in enumerate(clusters):
     first = cluster[0]
@@ -149,33 +152,42 @@ def output_as_csv(clusters, names, descr, sim_matrix):
     for node_idx in cluster:
         predicate = names[node_idx]
         predicate_desc = descr[node_idx]
-        similarity_score = sim_matrix[node_idx][first]
-        csv_data.append([i+1, predicate, predicate_desc, cluster_size, similarity_score])
+        var = variables[node_idx]
+        # similarity_score = sim_matrix[node_idx][first]
+        csv_data.append([i+1, predicate, predicate_desc, var, cluster_size])
 
-  output_df = pd.DataFrame(csv_data, columns=['cluster_number', 'predicate', 'predicate_description', 'cluster_size', 'similarity_score'])
-  output_df.to_csv('clustering_results_0.92.csv', index=False)
+  output_df = pd.DataFrame(csv_data, columns=['cluster_number', 'predicate', 'predicate_description', 'vars', 'cluster_size'])
+  output_df.to_csv(f'clustering_results_{threshold}.csv', index=False)
   return
 
 # ---
 
-def find_max_sim_pred_index(sim_matrix, baseline_index, clustered, threshold):
+def normalize_sim_matrix(sim_matrix):
+    sim_matrix = np.array(sim_matrix)
+    min_val = np.min(sim_matrix)
+    max_val = np.max(sim_matrix)
+    return (sim_matrix - min_val) / (max_val - min_val)
+
+# ---
+
+def find_max_sim_pred_index(sim_matrix, baseline_index, clustered, variables, threshold):
   max_score = 0
   max_index = -1
   for i in range(len(sim_matrix[baseline_index])):
-    if (i != baseline_index) and (not clustered[i]) and (sim_matrix[baseline_index][i] > max_score) and (sim_matrix[baseline_index][i] > threshold):
+    if (i != baseline_index) and (not clustered[i]) and (len(variables[baseline_index]) == len(variables[i])) and (sim_matrix[baseline_index][i] > max_score) and (sim_matrix[baseline_index][i] > threshold):
       max_index = i
       max_score = sim_matrix[baseline_index][i]
   return max_index
 
 # ---
 
-def find_most_sim_to_cluster(sim_matrix, current_cluster, clustered, threshold):
+def find_most_sim_to_cluster(sim_matrix, current_cluster, clustered, variables, threshold):
   max_score = 0
   max_index = -1
   for i in range(len(sim_matrix)):
     temp_score = 0
     for pred_index in current_cluster:
-      if (i not in current_cluster) and (not clustered[i]) and (sim_matrix[i][pred_index] > max_score) and (sim_matrix[i][pred_index] > threshold):
+      if (i not in current_cluster) and (not clustered[i]) and (len(variables[pred_index]) == len(variables[i])) and (sim_matrix[i][pred_index] > max_score) and (sim_matrix[i][pred_index] > threshold):
         temp_score += sim_matrix[i][pred_index]
     if temp_score / len(current_cluster) > max_score:
       max_score = temp_score / len(current_cluster)
@@ -184,15 +196,15 @@ def find_most_sim_to_cluster(sim_matrix, current_cluster, clustered, threshold):
 
 # ---
 
-def sim_to_all_pred_in_cluster(sim_matrix, baseline_index, current_cluster, threshold):
-  for pred_index in current_cluster:
-    if sim_matrix[pred_index][baseline_index] < threshold:
-      return False
-  return True
+# def sim_to_all_pred_in_cluster(sim_matrix, baseline_index, current_cluster, threshold):
+#   for pred_index in current_cluster:
+#     if sim_matrix[pred_index][baseline_index] < threshold:
+#       return False
+#   return True
 
 # ---
       
-def clustering_clique_method(sim_matrix, predicate_list, threshold=0.92):
+def clustering_clique_method(sim_matrix, predicate_list, variables, threshold=0.92):
     n = len(predicate_list)
     clustered = [False] * n
     temp_clustered = clustered.copy()
@@ -206,12 +218,12 @@ def clustering_clique_method(sim_matrix, predicate_list, threshold=0.92):
           current_cluster = [i]
           temp_clustered[i] = True
           # add most similar not yet clustered predicate
-          most_sim_pred_index = find_max_sim_pred_index(sim_matrix, i, temp_clustered, threshold)
+          most_sim_pred_index = find_max_sim_pred_index(sim_matrix, i, temp_clustered, variables, threshold)
           while most_sim_pred_index != -1:
             temp_clustered[most_sim_pred_index] = True
             current_cluster.append(most_sim_pred_index)
 
-            most_sim_pred_index = find_most_sim_to_cluster(sim_matrix, current_cluster, temp_clustered, threshold)
+            most_sim_pred_index = find_most_sim_to_cluster(sim_matrix, current_cluster, temp_clustered, variables, threshold)
             # for j in range(n):
             #   if not temp_clustered[j] and sim_to_all_pred_in_cluster(sim_matrix, j, current_cluster, threshold):
             #     temp_clustered[j] = True

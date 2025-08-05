@@ -1,0 +1,426 @@
+cluster_number,predicate,predicate_description,vars,cluster_size
+1,System, x is a system,x,38
+1,System45, x is a system,x,38
+1,System52, x is a system,x,38
+1,System55, x is a system,x,38
+1,System57, w is a system,w,38
+1,System62, y is a system,y,38
+1,System0, x is a system,x,38
+1,System3, x is a system,x,38
+1,System4, x is a system,x,38
+1,System9, z is a system,z,38
+1,System10, x is a system,x,38
+1,System13, x is a system,x,38
+1,System14, x is a system,x,38
+1,System20, x is a system,x,38
+1,System22, x is a system,x,38
+1,System23, w is a system,w,38
+1,System24, x is a system,x,38
+1,System34, x is a system,x,38
+1,System35, x is a system,x,38
+1,System36, x is a system,x,38
+1,System41, x is a system,x,38
+1,System46, x is a system,x,38
+1,System53, x is a system,x,38
+1,System56, x is a system,x,38
+1,System63, y is a system,y,38
+1,System64, x is a system,x,38
+1,System66, x is a system,x,38
+1,System68, x is a system,x,38
+1,System70, x is a system,x,38
+1,System74, y is a system,y,38
+1,System75, x is a system,x,38
+1,System85, x is a system,x,38
+1,System17, w is a system,w,38
+1,WebSystem, x is a web system,x,38
+1,SystemActivity, y is a system activity,y,38
+1,NetworkActivity, y is a network activity,y,38
+1,NetworkTraffic, y is network traffic,y,38
+1,Traffic, y is traffic,y,38
+2,File, x is a file,x,9
+2,File12, x is a file,x,9
+2,File39, w is a file,w,9
+2,File42, w is a file,w,9
+2,File43, x is a file,x,9
+2,File78, z is a file,z,9
+2,File29, x is a file,x,9
+2,FileType, z is a file type,z,9
+2,FileSystem, y is a file system,y,9
+3,SecureSession, x is a secure session,x,9
+3,Secure, y is secure,y,9
+3,Session49, x is a session,x,9
+3,Session, y is a session,y,9
+3,Session11, x is a session,x,9
+3,SessionData, x is session data,x,9
+3,SessionManagementPolicy, y is a session management policy,y,9
+3,NetworkSessionData, y is network session data,y,9
+3,SecurePath, z is a secure path,z,9
+4,Rule, w is a rule,w,9
+4,Rule44, w is a rule,w,9
+4,Rule77, y is a rule,y,9
+4,RuleSet, x is a rule set,x,9
+4,RuleEngine, y is a rule engine,y,9
+4,PolicyOrRuleSet, y is a policy or rule set,y,9
+4,Policy, w is a policy,w,9
+4,RoutingPolicy, x is a routing policy,x,9
+4,RoutingPath, y is a routing path,y,9
+5,Verification, z is a verification,z,7
+5,VerificationAction, y is a verification action,y,7
+5,VerificationResult, z is a verification result,z,7
+5,ToBeVerified, x is to be verified,x,7
+5,CryptographicVerification, y is a cryptographic verification,y,7
+5,CryptographicHashFunction, x is a cryptographic hash function,x,7
+5,Hash, x is a hash,x,7
+6,FlaggedAsSuspicious, x is flagged as suspicious,x,6
+6,Suspicious, y is suspicious,y,6
+6,FlaggedAsAnomaly, x is flagged as anomaly,x,6
+6,Flagged, x is flagged,x,6
+6,FlaggedForReview, x is flagged for review,x,6
+6,Flag, y is a flag,y,6
+7,SourceFormat, y is a source format,y,5
+7,Source, y is a source,y,5
+7,EventSource, x is an event source,x,5
+7,Format, x is a format,x,5
+7,TargetFormat, z is a target format,z,5
+8,Alert, x is an alert,x,5
+8,Alert37, y is an alert,y,5
+8,Alert8, x is an alert,x,5
+8,Alert32, z is an alert,z,5
+8,Alerted, x is alerted,x,5
+9,Baseline, x is a baseline,x,5
+9,Baseline25, y is a baseline,y,5
+9,Baseline67, y is a baseline,y,5
+9,BaselineModel, y is a baseline model,y,5
+9,BaselineBehaviorModel, y is a baseline behavior model,y,5
+10,Result, y is a result,y,4
+10,Result18, y is a result,y,4
+10,Result21, y is a result,y,4
+10,ClassificationResult, x is a classification result,x,4
+11,Log, z is a log,z,4
+11,Log6, y is a log,y,4
+11,Log7, x is a log,x,4
+11,Log27, s is a log,s,4
+12,CallStack, y is a call stack,y,4
+12,CallStack1, x is a call stack,x,4
+12,CallStack2, y is a call stack,y,4
+12,ShadowCallStack, z is a shadow call stack,z,4
+13,Device, x is a device,x,4
+13,DeviceType, y is a device type,y,4
+13,ExternalDevice, z is an external device,z,4
+13,FilteringDevice, x is a filtering device,x,4
+14,ContentElement, x is a content element,x,4
+14,Content, x is content,x,4
+14,Content54, y is content,y,4
+14,Content81, x is content,x,4
+15,Logged5, x is logged for y,"x,y",4
+15,IsLogged, x is logged in y ,"x,y",4
+15,LoggedIn, y is logged in s ,"y,s",4
+15,LoggedIn28, z is logged in s ,"z,s",4
+16,Detected31, y detects x,"y,x",4
+16,Detects, x detects y,"x,y",4
+16,Recognizes, x recognizes y ,"x,y",4
+16,RecognizedBy, y is recognized by z ,"y,z",4
+17,Domain, z is a domain,z,4
+17,DomainName, y is a domain name,y,4
+17,DomainName60, x is a domain name,x,4
+17,Subdomain, w is a subdomain,w,4
+18,Available, x is available,x,4
+18,Available79, y is available,y,4
+18,Available80, x is available,x,4
+18,Available71, x is available,x,4
+19,Records, z records y,"z,y",3
+19,Tracks, x tracks y ,"x,y",3
+19,Documents, x documents y ,"x,y",3
+20,ConversionProcess, x is a conversion process,x,3
+20,Process, x is a process,x,3
+20,Process16, x is a process,x,3
+21,AdministrativeActivity, y is an administrative activity,y,3
+21,Administrative, y is administrative,y,3
+21,Administrator, x is an administrator,x,3
+22,Generates, z generates x,"z,x",3
+22,Generated33, y generates z,"y,z",3
+22,Generates38, x generates y ,"x,y",3
+23,User, x is a user,x,3
+23,User69, z is a user,z,3
+23,User82, x is a user,x,3
+24,Subject, y is a subject,y,3
+24,Subject50, x is a subject,x,3
+24,Subject65, x is a subject,x,3
+25,Enabled, x is enabled,x,3
+25,Enabled73, x is enabled,x,3
+25,Enabled48, x is enabled ,x,3
+26,CommunicationCommunity, y is a communication community,y,3
+26,Identifying, w is identifying a communication community,w,3
+26,Clustering, w is clustering a communication community,w,3
+27,RelatedTo, y is related to x,"y,x",2
+27,AssociatedWith, y is associated with w,"y,w",2
+28,URL, x is a URL,x,2
+28,URL84, y is a URL,y,2
+29,ThreatClassificationScore, y is a threat classification score,y,2
+29,ThreatClassificationLabel, y is a threat classification label,y,2
+30,Authorized, x is authorized,x,2
+30,Unauthorized, y is unauthorized,y,2
+31,Logged, x is logged,x,2
+31,Logged15, x is logged,x,2
+32,TriggeredBy, w is triggered by z ,"w,z",2
+32,Triggered, x is triggered for y,"x,y",2
+33,Contains, x contains y ,"x,y",2
+33,Contains59, x contains y,"x,y",2
+34,Tampering, y is tampered,y,2
+34,Tampering30, x is tampered,x,2
+35,ExtractsFeatureFrom, x extracts feature y from z ,"x,y,z",2
+35,ExtractsFrom, x extracts y from z ,"x,y,z",2
+36,Validated, y is validated,y,2
+36,Valid, y is valid,y,2
+37,Endpoint, x is an endpoint,x,2
+37,Endpoint86, x is an endpoint,x,2
+38,Recorded, x is recorded,x,2
+38,Recorded19, y is recorded ,y,2
+39,PartOf, y is part of z ,"y,z",2
+39,PartOf61, y is part of x ,"y,x",2
+40,Host, y is a host,y,2
+40,Host40, x is a host,x,2
+41,PassivelyCapturedFrom, x is passively captured from y ,"x,y",2
+41,CapturedFrom, x is captured from y ,"x,y",2
+42,PropertiesExtracted, properties of x have been extracted,x,2
+42,PropertiesAnalyzed, properties of x have been analyzed,x,2
+43,ReputationQuery, x is a reputation query,x,2
+43,ReputationSource, y is a reputation source,y,2
+44,ResultOf, y is the result of x ,"y,x",2
+44,ResultOf26, z is the result of y ,"z,y",2
+45,AggregatesStatistics, w aggregates statistics across x,"w,x",2
+45,ComputesStatistics, w computes statistics across x,"w,x",2
+46,Facility, z is a facility,z,2
+46,PhysicalFacility, y is a physical facility,y,2
+47,GrantsAccess, x grants access to y for z,"x,y,z",2
+47,DeniesAccess, x denies access to y for z,"x,y,z",2
+48,AnalysisTool, x is an analysis tool,x,2
+48,LogAnalysisTool, x is a log analysis tool,x,2
+49,Has, x has y ,"x,y",2
+49,Has58, w has x,"w,x",2
+50,InFormat, w is in format x ,"w,x",2
+50,ContentInForm, y is in form z ,"y,z",2
+51,DigitalSignature, y is a digital signature,y,2
+51,Signature, w is a signature,w,2
+52,ContainsDigitalSignature, x contains y as a digital signature,"x, y",2
+52,ReferencesDigitalSignature, x references y as a digital signature,"x, y",2
+53,DNSQuery, y is a DNS query,y,2
+53,DNSQuery51, x is a DNS query,x,2
+54,ForDomain, y is for z ,"y,z",2
+54,ForSubdomain, y is for w ,"y,w",2
+55,SupportsLogicFor, x supports logic for w ,"x,w",2
+55,FunctionalitySupportedBy, x supports functionality y ,"x,y",2
+56,HasAccessTo, x has access to y ,"x,y",2
+56,HasAccessTo76, x has access to y ,"x,y",2
+57,AuthenticationMechanism, y is an authentication mechanism,y,2
+57,EncryptionMechanism, y is an encryption mechanism,y,2
+58,Configured, y is configured,y,2
+58,Configured72, x is configured,x,2
+59,LoggingEnabled, logging of x is enabled,x,2
+59,MonitoringEnabled, monitoring of x is enabled,x,2
+60,AvailableOn, x is available on y ,"x,y",2
+60,Available83, x has y available,"x,y",2
+61,AnalyzesMemory, x is able to analyze memory,x,2
+61,AnalyzesDisk, x is able to analyze disk contents,x,2
+62,ConfiguredToGenerateHeartbeat, x is configured to generate heartbeat messages,x,2
+62,ConfiguredToTransmitHeartbeatSecurely, x is configured to transmit heartbeat messages securely,x,2
+63,HashOf, y is the hash of x,"x, y",1
+64,MalwareHash, z is a known malware hash,z,1
+65,Matches, y matches z,"y, z",1
+66,ClassifiedAsMalware, x is classified as malware,x,1
+67,RecordedInLog, x records y in z ,"x,y,z",1
+68,Established, x is established,x,1
+69,AccessEvent, y is an access event,y,1
+70,AuditLog, z is an audit log,z,1
+71,Timestamp, w is a timestamp,w,1
+72,AssignedTo, y is assigned to x ,"y,x",1
+73,MatchFoundBy, y is a match found by x,y,1
+74,DetectionLog, z is a detection log,z,1
+75,GeneratedBy, z is generated by x,"z,x",1
+76,MismatchCount, w is a mismatch count,w,1
+77,Updates, w is updated,w,1
+78,Between, w is mismatch count between y and z,"w,y,z",1
+79,ComparedForConsistency, x and y have been compared for consistency,"x,y",1
+80,LAN, y is a LAN,y,1
+81,AllowedConnection, x is allowed to connect to y ,"x,y",1
+82,Authenticated, x is authenticated,x,1
+83,Blocked, x is blocked,x,1
+84,Quarantined, x is quarantined,x,1
+85,SourceOfConversion, y is a source format of x ,"x,y",1
+86,TargetOfConversion, z is a target format of x ,"x,z",1
+87,RuleAppliedTo, w is a rule applied to x ,"w,x",1
+88,Firmware, y is a firmware,y,1
+89,Verifies, z verifies x and y ,"z,x,y",1
+90,Fails, z fails,z,1
+91,Response, w is a response,w,1
+92,Triggers, w is triggered ,w,1
+93,ViolatesExpectedLineage, x violates expected lineage,x,1
+94,Report, x is a report,x,1
+95,Generated, x is generated,x,1
+96,MemoryBoundaryTrackingAnalysis, y is a memory boundary tracking analysis,y,1
+97,DoesNotConformToSchema, x does not conform to y ,"x,y",1
+98,UnlinkedOrUnused, x is unlinked or unused,x,1
+99,Discarded, x is discarded,x,1
+100,ExceptionHandler, x is an exception handler,x,1
+101,MemoryAddress, y is a memory address,y,1
+102,Reports, x reports y ,"x,y",1
+103,AdaptiveThreatMitigation, y is an adaptive threat mitigation technique,y,1
+104,EnabledPostAuthentication, x enables y post-authentication,"x,y",1
+105,IndicatesCompromiseOrUnauthorizedAccess, x indicates compromise or unauthorized access,x,1
+106,RegistrySetting, x is a registry setting,x,1
+107,SecurityRelevant, x is security relevant,x,1
+108,Modified, x is modified,x,1
+109,Detected, y detects x ,"y, x",1
+110,ProfilingEngine, x is a profiling engine,x,1
+111,ObservedPayload, z is an observed payload,z,1
+112,Feature, y is a measurable feature,y,1
+113,Uses, x uses y ,"x,y",1
+114,AnomalousActivityDetected,anomalous activity is detected for x,x,1
+115,MetadataField, w is a metadata field,w,1
+116,Checked, w is a checked field for x ,"w,x",1
+117,ConsistentWithFileData, w is consistent with actual data of x ,"w,x",1
+118,BehavioralProfile, x is a behavioral profile,x,1
+119,DomainAccountActivity, y is domain account activity,y,1
+120,NewData, z is new data,z,1
+121,ForActivity, x is for activity y,"x,y",1
+122,UpdatedWith, x is updated with z,"x,z",1
+123,AnomalousCommunication, x is anomalous communication,x,1
+124,RestrictsAccessTo, x restricts access to y ,"x,y",1
+125,ComparesSessionStatistics, x compares session statistics across y and z ,"x,y,z",1
+126,IdentifiesPattern, x identifies patterns across y and z ,"x,y,z",1
+127,ScriptAnalysisResult, x is a result of a script analysis,x,1
+128,Certificate, x is a certificate,x,1
+129,EdgeDevice, x is an edge device,x,1
+130,InboundFilteringPolicy, y is an inbound filtering policy,y,1
+131,Enforces, x enforces y,"x,y",1
+132,FileCreateSystemCall, x is a file creation system call,x,1
+133,NonCompliant, x is non-compliant,x,1
+134,Unsafe, x is unsafe,x,1
+135,Safer, y is safer,y,1
+136,SubstitutedWith, x is substituted with y ,"x, y",1
+137,PolicyAllows, Policy explicitly allows x to interact with y ,"x,y",1
+138,Interacts, x interacts with y ,"x,y",1
+139,NotTampered, x has not been tampered with,x,1
+140,LogsResult, x logs result y,"x,y",1
+141,TimeBasedStatistic, z is a time-based statistic,z,1
+142,ComputesFrom, x computes z from y ,"x,z,y",1
+143,ProcessingEnvironment, y is a processing environment,y,1
+144,Regular, y is regular,y,1
+145,IsolatedFrom, x is isolated from y,"x,y",1
+146,CandidateString, x is a candidate string,x,1
+147,TrustedString, y is a trusted string,y,1
+148,DeceptiveSimilarityDetected, deceptive similarity is detected between x and y ,"x,y",1
+149,MatchIdentified, a match between x and y is identified ,"x,y",1
+150,MetadataGrouping, x is a metadata grouping,x,1
+151,ObservedRatio, x is an observed ratio,x,1
+152,SignificantDeviation, deviation between x and y is significant,"x,y",1
+153,StartupEntry, x is a startup entry,x,1
+154,ThreatSignature, y is a threat signature,y,1
+155,CorrelatedWith, x is correlated with y ,"x,y",1
+156,UnexpectedChange, x has unexpected change,x,1
+157,Metric, y is a metric,y,1
+158,IPC, z is IPC traffic,z,1
+159,AuthenticationEvent, y is an authentication event,y,1
+160,Threshold, z is a threshold,z,1
+161,Evaluated, x evaluated y,"x,y",1
+162,Exceeds, y exceeds z ,"y,z",1
+163,Extracted, w is extracted,w,1
+164,PassedTo, w is passed to x,"w,x",1
+165,AnalysisWindow, y is an analysis window,y,1
+166,ComputesRatio, x computes the ratio of downloaded to uploaded data during y ,"x,y",1
+167,Routable, y is routable,y,1
+168,ContentScanningEngine, y is a content scanning engine,y,1
+169,CanParseAndInspect, y can parse and inspect x ,"y,x",1
+170,UsableForAuthenticityCheck, y can be used for authenticity check,y,1
+171,AuthenticationEventLogsAvailable, authentication event logs are available from x ,x,1
+172,Element, x is an element,x,1
+173,DefinesRemovalOf, w defines removal of x ,"w,x",1
+174,CredentialRelatedMemoryDump, x is a credential-related memory dump,x,1
+175,Accessible, x is accessible,x,1
+176,PacketInspection, x is packet inspection,x,1
+177,MonitorsTrafficFlows, x monitors traffic flows,x,1
+178,ActivelyResolving, x is actively resolving y ,"x,y",1
+179,Enforces47, x enforces y ,"x, y",1
+180,DirectsThrough, x directs y through z ,"x,y,z",1
+181,SecurityModule, x is a security module,x,1
+182,Performs, x performs y ,"x,y",1
+183,DurationMeasurable, the duration of x is measurable,x,1
+184,Credential, y is a credential,y,1
+185,AccessControlSystem, z is an access control system,z,1
+186,Possesses, x possesses y ,"x,y",1
+187,IssuedFor, x is issued for y ,"x,y",1
+188,Scan, z is a scan,z,1
+189,Proceeds, z proceeds,z,1
+190,LoadedInto, x is loaded into y ,"x,y",1
+191,Form, z is a form,z,1
+192,FormAllowsInspection, z allows inspection,z,1
+193,HistoricalData, z is historical data,z,1
+194,CanCreateFrom, x can create y from z ,"x, y, z",1
+195,Active, y is active,y,1
+196,HasAuthenticationMechanism, x has authentication mechanism y ,"x,y",1
+197,CanonicalFormatOrSchema, x is a canonical format or schema,x,1
+198,Defined, x is defined,x,1
+199,Allows, x allows y,"x,y",1
+200,SpecifiesReconstruction, x specifies how z is reconstructed,"x,z",1
+201,Kernel, x is a kernel,x,1
+202,NativeFeature, y is a native feature,y,1
+203,Implements, x implements y ,"x,y",1
+204,ProvidesProcessIsolation, y provides process isolation ,y,1
+205,IPToGeolocationResolutionEnabled, IP-to-geolocation resolution is enabled in x ,x,1
+206,List, x is a list,x,1
+207,CriticalSystemFile, y is a critical system file,y,1
+208,ObservedFrom, x is observed from y ,"x,y",1
+209,Application, x is an application,x,1
+210,ExecutionContext, y is an execution context,y,1
+211,EnforcesSeparation, x enforces separation for y ,"x,y",1
+212,FileSystemActivity, x is related to file system activity,x,1
+213,ServiceBinaryFile, x is a service binary file,x,1
+214,ExistsOn, x exists on y,"x,y",1
+215,Sandbox, y is a sandbox,y,1
+216,SystemObservability, x is a system observability mechanism,x,1
+217,EnabledIn, x is enabled in y,"x,y",1
+218,RecordBehavior, x records behavior,x,1
+219,ReadsLeadingBytes, y reads the leading bytes of z ,"y,z",1
+220,ComparesWithExpectedValue, y compares z with expected value w ,"y,z,w",1
+221,MagicNumber, w is a magic number ,w,1
+222,Request, z is a request,z,1
+223,Time, w is a time,w,1
+224,InitiatesRequest, x initiates request z,"x,z",1
+225,RequestForAccessTo, request z is for access to y,"z,y",1
+226,AtTime, request z occurs at w,"z,w",1
+227,TypicalRPCOperation, y describes typical RPC operation(s),y,1
+228,Maintains, x maintains y,"x,y",1
+229,FirewallService, x is a firewall service,x,1
+230,Hardened, x is hardened,x,1
+231,ConfigurationChange, y is a configuration change,y,1
+232,HasPolicyOrRuleSet, x has policy or rule set y,"x,y",1
+233,Group, z is a group,z,1
+234,SpecifiesAccess, y specifies access for z,"y,z",1
+235,Protocol, y is a protocol,y,1
+236,ForensicTool, x is a forensic tool,x,1
+237,JobMonitoring, x is job monitoring,x,1
+238,ConfiguredToAllowAccessToExternalReputationServices, y is configured to allow access to external reputation services,y,1
+239,FileFormatSpecification, y is a file format specification,y,1
+240,Inbound, y is inbound,y,1
+241,CanObserveSourceIP, x can observe the source IP of y ,"x,y",1
+242,Defines, x defines y ,"x,y",1
+243,Deploys, x deploys y ,"x,y",1
+244,DeterminesDenial, y determines z is denied,"y,z",1
+245,DeniedExecution, z is denied execution,z,1
+246,CanLookup, y can look up x ,"y,x",1
+247,AllowList, x is an allow list,x,1
+248,DenyList, x is a deny list,x,1
+249,ConfiguredFor, x is configured for y OR x is configured for z,"x,y / x,z",1
+250,IndirectBranchInstruction, x is an indirect branch instruction,x,1
+251,ExecutionTraceAvailable, execution trace of x is available,x,1
+252,DetectsChanges, x detects changes,x,1
+253,InfrastructureComponent, x is an infrastructure component,x,1
+254,SupportsBroadcastIsolation, x supports broadcast isolation features,x,1
+255,DetectedAsHarmful, x is detected as potentially harmful,x,1
+256,DetectedAsPolicyViolating, x is detected as policy-violating,x,1
+257,TypicalResourceAccessActivity, y describes typical resource access activity for x ,"y,x",1
+258,Key, y is a key,y,1
+259,Initialized, x has y initialized,"x,y",1
+260,Captures, x captures y,"x,y",1
+261,Receives, x receives y,"x,y",1
+262,MessageIntegrityEnabled, x has message integrity mechanisms enabled,x,1
