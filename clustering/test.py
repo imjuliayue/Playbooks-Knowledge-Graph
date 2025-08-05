@@ -22,5 +22,5 @@ names, descr, variables, sim_matrix = get_pred_list(test)
 # print(len(sim_matrix[0]))
 
 sim_matrix = normalize_sim_matrix(sim_matrix)
-clusters = clustering_clique_method(sim_matrix, names, variables, 0.7)
-output_as_csv(clusters, names, descr, variables, 0.7)
+clusters = clustering_clique_method(sim_matrix, names, variables, 0.825)
+output_as_csv(clusters, names, descr, variables, 0.825)
