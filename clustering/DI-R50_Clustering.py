@@ -1,7 +1,7 @@
 from clusteringFunctions import *
 
 # FLAGS AND INITIAL VALUES -----------------
-FOLDERNAME = "DI-R50_Data"
+FOLDERNAME = "DI-R50_Data/Clustering"
 EMBED_FLAG = False
 
 # LOAD PICKLES ----------------------------
