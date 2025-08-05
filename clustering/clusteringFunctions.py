@@ -19,6 +19,8 @@ from tenacity import retry, wait_random_exponential, stop_after_attempt
 
 import re
 
+from sklearn.metrics.pairwise import cosine_similarity
+
 # -----------------------------------------
 
 # FUNCTIONS --------------------------------
@@ -96,7 +98,7 @@ def savePkl(FOLDERNAME, FILENAME, DATA):
 
 def loadPkl(FOLDERNAME, FILENAME):
     # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
-    with open(f"data/{FOLDERNAME}/{FILENAME}.pkl", 'rb') as f:
+    with open(f"../data/{FOLDERNAME}/{FILENAME}.pkl", 'rb') as f:
         return pkl.load(f)
     
 # ---
@@ -118,7 +120,30 @@ def cleanForCluster(condDI):
         cleanedDescr.append(descr)
         # cleanedDescr.append(descr + f" {len(var)} VARIABLES")
       cond.append(cleanedDescr)
-      
+
+# ---
+
+def get_pred_list(pkl):
+    names = []
+    descr = []
+    embeds = []
+
+    for i in range(len(pkl)):
+        # index 0 contains predicate name
+        names.append(pkl[i][0])
+        # index 1 contains predicate descr (with vars)
+        # index 2 contains predicate descr (withOUT vars)
+        descr.append(pkl[i][1])
+        # index 3 contains embedding
+        embeds.append(pkl[i][3])
+    cosine_sim_matrix = cosine_similarity(np.array(embeds))
+    return (np.array(names), np.array(descr), cosine_sim_matrix)
+
+# ---
+
+
+
+# ---
       
 def clustering_clique_method(similarity_matrix, predicate_list, threshold=0.9):
     n = len(predicate_list)
