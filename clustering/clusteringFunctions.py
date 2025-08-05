@@ -13,9 +13,11 @@ import csv
 
 import pickle as pkl
 
-import ast
+import json
 
 from tenacity import retry, wait_random_exponential, stop_after_attempt
+
+import re
 
 # -----------------------------------------
 
@@ -55,7 +57,7 @@ def getEmbeds(values):
 
 # ---
 
-def saveData(path, data, name):
+def saveData(path, name, data):
   # path is the path to save the data to (can include '../'), W.R.T. WHERE RUNNING SCRIPT
   # data is in the form of [[name, descr1, descr2, ...], [name2, descr1, descr2, ...], ...]
   # saves as CSV file with name as the first column and descriptions as the rest
@@ -72,9 +74,49 @@ def loadData(path, name):
   with open(f'{path}/{name}.csv', 'r') as f:
       reader = csv.reader(f)
       return [row for row in reader]
-  
+
 # ---
 
-def cleanForCluster():
-   # NOTE: function adds another column to processed csv --> removes variables from predicate descriptions.
-   pass
+# saves 1d array to txt file
+def saveTxt(FOLDERNAME, FILENAME, ARRAY):
+    # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
+    with open(f"data/{FOLDERNAME}/{FILENAME}.json", 'w') as f:
+        json.dump(ARRAY, f)
+    # np.savetxt(f'data/{FOLDERNAME}/{FILENAME}', np.array(ARRAY).reshape((-1,1)),fmt="%s")
+
+def loadTxt(FOLDERNAME, FILENAME):
+    # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
+    with open(f"data/{FOLDERNAME}/{FILENAME}.json", 'r') as f:
+        return json.load(f)
+    
+def savePkl(FOLDERNAME, FILENAME, DATA):
+    # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
+    with open(f"data/{FOLDERNAME}/{FILENAME}.pkl", 'wb') as f:
+        pkl.dump(DATA, f)
+
+def loadPkl(FOLDERNAME, FILENAME):
+    # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
+    with open(f"data/{FOLDERNAME}/{FILENAME}.pkl", 'rb') as f:
+        return pkl.load(f)
+    
+# ---
+
+def cleanForCluster(condDI):
+  # condDI is a list of lists, each list is [cond, descr, techDescr], log, [preds], [vars], [descr w vars]
+  # returns nothing; edits in place
+  # NOTE: function adds another column to processed csv --> removes variables from predicate descriptions.
+  for cond in condDI:
+      descrs = cond[4]
+      vars = cond[3]
+      cleanedDescr = []
+      for descr,var in zip(descrs,vars):
+        descr = " " + descr + " "
+        descr = re.sub(r":", " is", descr)
+        descr = re.sub(r",", "", descr)
+        descr = re.sub(r"\b(x|y|z|w)(?:'s)?\b", " ", descr)
+        descr = ' '.join(descr.strip().split())
+        cleanedDescr.append(descr)
+        # cleanedDescr.append(descr + f" {len(var)} VARIABLES")
+      cond.append(cleanedDescr)
+      
+      
