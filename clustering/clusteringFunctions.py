@@ -100,6 +100,16 @@ def loadPkl(FOLDERNAME, FILENAME):
     # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
     with open(f"data/{FOLDERNAME}/{FILENAME}.pkl", 'rb') as f:
         return pkl.load(f)
+
+def modified_savePkl(FILEPATH, FILENAME, DATA):
+    # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
+    with open(f"{FILEPATH}/{FILENAME}.pkl", 'wb') as f:
+        pkl.dump(DATA, f)
+
+def modified_loadPkl(FILEPATH, FILENAME):
+    # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
+    with open(f"{FILEPATH}/{FILENAME}.pkl", 'rb') as f:
+        return pkl.load(f)
     
 # ---
 
@@ -257,3 +267,19 @@ def create_cluster_dictionary(clusters_file_path, clusters_file_name):
   return pred_dict
 
 # ----
+
+def replace_pred_with_cluster_names(file_path, file_name, cluster_name_dict, save_file_path, save_file_name):
+  predicate_data = modified_loadPkl(file_path, file_name)
+  new_predicate_data = predicate_data.copy()
+  for i in range(len(predicate_data)):
+    pred_names = predicate_data[i][2]
+    replacement_pred_names = []
+    replacement_pred_descr = []
+    for pred in pred_names:
+      cluster_name, cluster_descr = cluster_name_dict[pred]
+      replacement_pred_names.append(cluster_name)
+      replacement_pred_descr.append(cluster_descr)
+    new_predicate_data[i][2] = replacement_pred_names.copy()
+    new_predicate_data[i][4] = replacement_pred_descr.copy()
+  modified_savePkl(save_file_path, save_file_name, new_predicate_data)
+  saveData(save_file_path, save_file_name, new_predicate_data)

@@ -1,11 +1,6 @@
 from clusteringFunctions import *
 
-def modified_loadPkl(FOLDERNAME, FILENAME):
-    # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
-    with open(f"../data/{FOLDERNAME}/{FILENAME}.pkl", 'rb') as f:
-        return pkl.load(f)
-
-test = modified_loadPkl('DI-R50_Data/Clustering', 'DI-R50_CLUSTER_READY_ALL')
+test = modified_loadPkl('../data/DI-R50_Data/Clustering', 'DI-R50_CLUSTER_READY_ALL')
 
 names, descr, variables, sim_matrix = get_pred_list(test)
 
@@ -28,4 +23,7 @@ names, descr, variables, sim_matrix = get_pred_list(test)
 path = "clustering_results"
 name = "clustering_after_chatGPT_naming"
 test_dict = create_cluster_dictionary(path, name)
-print(test_dict['PartOf61'])
+path_to_unique = "../data/DI-R50_Data/Extraction"
+save_file_path = "../data/replacement_test"
+replace_pred_with_cluster_names(path_to_unique, "DI-R50_Post_Unique", test_dict, save_file_path, "DI-R50_Post")
+replace_pred_with_cluster_names(path_to_unique, "DI-R50_Pre_Unique", test_dict, save_file_path, "DI-R50_Pre")
