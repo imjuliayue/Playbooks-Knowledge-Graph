@@ -1,11 +1,6 @@
 from clusteringFunctions import *
 
-def modified_loadPkl(FOLDERNAME, FILENAME):
-    # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
-    with open(f"../data/{FOLDERNAME}/{FILENAME}.pkl", 'rb') as f:
-        return pkl.load(f)
-
-test = modified_loadPkl('DI-R50_Data/Clustering', 'DI-R50_CLUSTER_READY_ALL')
+test = modified_loadPkl('../data/DI-R50_Data/Clustering', 'DI-R50_CLUSTER_READY_ALL')
 
 names, descr, variables, sim_matrix = get_pred_list(test)
 
@@ -21,6 +16,14 @@ names, descr, variables, sim_matrix = get_pred_list(test)
 # print(len(sim_matrix))
 # print(len(sim_matrix[0]))
 
-sim_matrix = normalize_sim_matrix(sim_matrix)
-clusters = clustering_clique_method(sim_matrix, names, variables, 0.825)
-output_as_csv(clusters, names, descr, variables, 0.825)
+# sim_matrix = normalize_sim_matrix(sim_matrix)
+# clusters = clustering_clique_method(sim_matrix, names, variables, 0.825)
+# output_as_csv(clusters, names, descr, variables, 0.825)
+
+path = "clustering_results"
+name = "clustering_after_chatGPT_naming"
+test_dict = create_cluster_dictionary(path, name)
+path_to_unique = "../data/DI-R50_Data/Extraction"
+save_file_path = "../data/replacement_test"
+replace_pred_with_cluster_names(path_to_unique, "DI-R50_Post_Unique", test_dict, save_file_path, "DI-R50_Post")
+replace_pred_with_cluster_names(path_to_unique, "DI-R50_Pre_Unique", test_dict, save_file_path, "DI-R50_Pre")

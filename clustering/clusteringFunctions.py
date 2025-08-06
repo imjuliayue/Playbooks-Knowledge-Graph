@@ -100,6 +100,16 @@ def loadPkl(FOLDERNAME, FILENAME):
     # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
     with open(f"data/{FOLDERNAME}/{FILENAME}.pkl", 'rb') as f:
         return pkl.load(f)
+
+def modified_savePkl(FILEPATH, FILENAME, DATA):
+    # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
+    with open(f"{FILEPATH}/{FILENAME}.pkl", 'wb') as f:
+        pkl.dump(DATA, f)
+
+def modified_loadPkl(FILEPATH, FILENAME):
+    # PATHWAY IS W.R.T. WHERE RUNNING SCRIPT
+    with open(f"{FILEPATH}/{FILENAME}.pkl", 'rb') as f:
+        return pkl.load(f)
     
 # ---
 
@@ -238,3 +248,43 @@ def clustering_clique_method(sim_matrix, predicate_list, variables, threshold=0.
       
     
     return final_clusters
+
+# ---
+
+def create_cluster_dictionary(clusters_file_path, clusters_file_name):
+  pred_dict = dict()
+  clusters_list = loadData(clusters_file_path, clusters_file_name)
+  # index 0 has row of headers
+  for i in range(1, len(clusters_list)):
+    pred_name = clusters_list[i][1]
+    # variables = clusters_list[i][3]
+    cluster_name = clusters_list[i][5]
+    cluster_descr = clusters_list[i][6]
+    
+    #each pred_name is unique
+    pred_dict[pred_name] = (cluster_name, cluster_descr)
+  
+  return pred_dict
+
+# ----
+
+def replace_pred_with_cluster_names(file_path, file_name, cluster_name_dict, save_file_path, save_file_name):
+  predicate_data = modified_loadPkl(file_path, file_name)
+  new_predicate_data = predicate_data.copy()
+  for i in range(len(predicate_data)):
+    pred_names = predicate_data[i][2]
+    pred_logical_expr = predicate_data[i][1]
+    replacement_pred_names = []
+    replacement_pred_descr = []
+    
+    for pred in pred_names:
+      cluster_name, cluster_descr = cluster_name_dict[pred]
+      replacement_pred_names.append(cluster_name)
+      replacement_pred_descr.append(cluster_descr)
+      pred_logical_expr = re.sub(rf'{pred}', rf'{cluster_name}', pred_logical_expr)
+
+    new_predicate_data[i][1] = pred_logical_expr
+    new_predicate_data[i][2] = replacement_pred_names
+    new_predicate_data[i][4] = replacement_pred_descr
+  modified_savePkl(save_file_path, save_file_name, new_predicate_data)
+  saveData(save_file_path, save_file_name, new_predicate_data)
