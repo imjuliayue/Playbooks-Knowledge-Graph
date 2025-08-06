@@ -247,12 +247,12 @@ def create_cluster_dictionary(clusters_file_path, clusters_file_name):
   # index 0 has row of headers
   for i in range(1, len(clusters_list)):
     pred_name = clusters_list[i][1]
-    variables = clusters_list[i][3]
+    # variables = clusters_list[i][3]
     cluster_name = clusters_list[i][5]
     cluster_descr = clusters_list[i][6]
     
     #each pred_name is unique
-    pred_dict[pred_name] = (cluster_name, cluster_descr, variables)
+    pred_dict[pred_name] = (cluster_name, cluster_descr)
   
   return pred_dict
 
