@@ -273,13 +273,18 @@ def replace_pred_with_cluster_names(file_path, file_name, cluster_name_dict, sav
   new_predicate_data = predicate_data.copy()
   for i in range(len(predicate_data)):
     pred_names = predicate_data[i][2]
+    pred_logical_expr = predicate_data[i][1]
     replacement_pred_names = []
     replacement_pred_descr = []
+    
     for pred in pred_names:
       cluster_name, cluster_descr = cluster_name_dict[pred]
       replacement_pred_names.append(cluster_name)
       replacement_pred_descr.append(cluster_descr)
-    new_predicate_data[i][2] = replacement_pred_names.copy()
-    new_predicate_data[i][4] = replacement_pred_descr.copy()
+      pred_logical_expr = re.sub(rf'{pred}', rf'{cluster_name}', pred_logical_expr)
+
+    new_predicate_data[i][1] = pred_logical_expr
+    new_predicate_data[i][2] = replacement_pred_names
+    new_predicate_data[i][4] = replacement_pred_descr
   modified_savePkl(save_file_path, save_file_name, new_predicate_data)
   saveData(save_file_path, save_file_name, new_predicate_data)
