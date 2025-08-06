@@ -3,7 +3,8 @@ from clusteringFunctions import *
 # FLAGS AND INITIAL VALUES -----------------
 FOLDEREXTRACT = "DI-R50_Data/Extraction"
 FOLDERNAME = "DI-R50_Data/Clustering"
-EMBED_FLAG = False
+EMBEDDINGMODEL = "text-embedding-3-large"
+EMBED_FLAG = True
 
 # LOAD PICKLES ----------------------------
 # [condID, condDescr, techDescr], log expr, [preds], [vars], [predDescrs]
@@ -47,11 +48,11 @@ print(len(prePredCDescrs),len(prePredDescrs),len(prePredNames))
 if EMBED_FLAG:
     embedsPost = getEmbeds([item for cond in postDI for item in cond[5]])
     embedsPre = getEmbeds([item for cond in preDI for item in cond[5]])
-    np.savetxt(f'data/{FOLDERNAME}/PostDI-R50_embeddings.txt', embedsPost)
-    np.savetxt(f'data/{FOLDERNAME}/PreDI-R50_embeddings.txt', embedsPre)
+    np.savetxt(f'data/{FOLDERNAME}/PostDI-R50_embeddings_{EMBEDDINGMODEL}.txt', embedsPost)
+    np.savetxt(f'data/{FOLDERNAME}/PreDI-R50_embeddings_{EMBEDDINGMODEL}.txt', embedsPre)
 else:
-    embedsPost = np.loadtxt(f"data/{FOLDERNAME}/PostDI-R50_embeddings.txt")
-    embedsPre = np.loadtxt(f"data/{FOLDERNAME}/PreDI-R50_embeddings.txt")
+    embedsPost = np.loadtxt(f"data/{FOLDERNAME}/PostDI-R50_embeddings_{EMBEDDINGMODEL}.txt")
+    embedsPre = np.loadtxt(f"data/{FOLDERNAME}/PreDI-R50_embeddings_{EMBEDDINGMODEL}.txt")
 
 # Change everything to normal floats
 testPost = embedsPost.tolist()
@@ -65,6 +66,6 @@ all = []
 for x in zip(postPredNames + prePredNames, postPredDescrs + prePredDescrs, postPredCDescrs + prePredCDescrs, postPredVars + prePredVars, testPost + testPre):
     all.append(list(x))
 
-savePkl(FOLDERNAME, "DI-R50_CLUSTER_READY_ALL", all)
+savePkl(FOLDERNAME, "DI-R50_CLUSTER_READY_ALL_{EMBEDDINGMODEL}", all)
 
 

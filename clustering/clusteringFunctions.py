@@ -38,7 +38,7 @@ def openai_client():
 # ---
 
 def get_embed(text):
-  emb = openai_client().embeddings.create(input = [text], model="text-embedding-ada-002")
+  emb = openai_client().embeddings.create(input = [text], model="text-embedding-3-large")
   return emb.data[0].embedding
 
 # ---
