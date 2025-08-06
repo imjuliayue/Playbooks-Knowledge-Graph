@@ -238,3 +238,22 @@ def clustering_clique_method(sim_matrix, predicate_list, variables, threshold=0.
       
     
     return final_clusters
+
+# ---
+
+def create_cluster_dictionary(clusters_file_path, clusters_file_name):
+  pred_dict = dict()
+  clusters_list = loadData(clusters_file_path, clusters_file_name)
+  # index 0 has row of headers
+  for i in range(1, len(clusters_list)):
+    pred_name = clusters_list[i][1]
+    variables = clusters_list[i][3]
+    cluster_name = clusters_list[i][5]
+    cluster_descr = clusters_list[i][6]
+    
+    #each pred_name is unique
+    pred_dict[pred_name] = (cluster_name, cluster_descr, variables)
+  
+  return pred_dict
+
+# ----

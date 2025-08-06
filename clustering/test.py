@@ -21,6 +21,16 @@ names, descr, variables, sim_matrix = get_pred_list(test)
 # print(len(sim_matrix))
 # print(len(sim_matrix[0]))
 
-sim_matrix = normalize_sim_matrix(sim_matrix)
-clusters = clustering_clique_method(sim_matrix, names, variables, 0.825)
-output_as_csv(clusters, names, descr, variables, 0.825)
+# sim_matrix = normalize_sim_matrix(sim_matrix)
+# clusters = clustering_clique_method(sim_matrix, names, variables, 0.825)
+# output_as_csv(clusters, names, descr, variables, 0.825)
+
+#prompt used:
+# You will be given a csv file that contains the following headers: cluster_number,predicate,predicate_description,vars,cluster_size
+
+# For each cluster, add only two new columns that contain a predicate name and description that accurately represents the cluster as a whole. export the result as a csv.
+
+path = "clustering_results"
+name = "clustering_after_chatGPT_naming"
+test_dict = create_cluster_dictionary(path, name)
+print(test_dict['PartOf61'])
