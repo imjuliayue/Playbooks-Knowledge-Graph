@@ -66,6 +66,6 @@ all = []
 for x in zip(postPredNames + prePredNames, postPredDescrs + prePredDescrs, postPredCDescrs + prePredCDescrs, postPredVars + prePredVars, testPost + testPre):
     all.append(list(x))
 
-savePkl(FOLDERNAME, "DI-R50_CLUSTER_READY_ALL_{EMBEDDINGMODEL}", all)
+savePkl(FOLDERNAME, f"DI-R50_CLUSTER_READY_ALL_{EMBEDDINGMODEL}", all)
 
 
