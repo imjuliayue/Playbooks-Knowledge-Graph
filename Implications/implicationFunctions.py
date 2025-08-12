@@ -42,19 +42,20 @@ def predImplication(axiom, pred):
           "role": "system",
           "content": f'''
                         You are given:
-                        1) A SINGLE axiom predicate, each with: Predicate name (string), Natural-language description of its meaning, Number of variables it takes (arity)
-                        2) A theorem predicate with: Predicate name, Natural-language description, Number of variables it takes (arity)
+                        1) A SINGLE axiom predicate, each with: Predicate name (string), variable order for predicate inputs (variables correspond to vars in description), Natural-language description of its meaning
+                        2) A theorem predicate with: Predicate name, (variables correspond to vars in description), variable order for predicate inputs, Natural-language description
 
                         Your task:
                         Determine whether the axiom predicate implies the theorem predicate. Begin by stating your goal: "Does <axiom description> imply <theorem description>"? Replace each variable with enumerations.
-                          For example, if axiom was "x interacts with y" and theorm was "t denies x", you would begin with "Does <1> interacts with <2>" imply "<3> denies <4>"? You are free to replace the enumerations with whatever variables make most sense. 
+                          For example, if axiom was "x interacts with y" and theorm was "t denies x", you would begin with "Does <1> interacts with <2>" imply "<3> denies <4>"? You are free to replace the enumerations with whatever variables make most sense.
+                          When deciding whether implication exists, pay no attention to the provided variable names. Assign as you wish, you have flexibility. 
                         Assume the natural-language descriptions reflect real-world meanings.
-                        Use common-sense reasoning to connect axioms to the theorem whenever plausible, even if the connection is not explicitly stated.
+                        Use common-sense reasoning to connect axioms to the theorem whenever plausible, even if connection is not explicitly stated.
                         Only output "False." if there is truly no reasonable conceptual bridge from the axioms to the theorem.
 
                         Formalization rules:
                         All final expressions must be valid Alloy syntax.
-                        You must respect the exact predicate names and their arity (number of variables) as given.
+                        You must respect the exact predicate names and the number of variables inputs as given.
                         All variables used must be declared in a quantifier (all, some, one, no, etc.) before they appear in a predicate.
                         Alloy function application must use square brackets: PredicateName[var1, var2, ...].
                         Quantifiers must specify the type `everything`. Example: all x: everything | ....
@@ -181,12 +182,9 @@ def findAssertions(predicate, axioms, dictionary):
             if(dictionary.get(x[0]) == None):
                dictionary[x[0]] = []
             dictionary[x[0]].append(predicate[0])
-            numVarsPred = len(predicate[1].split(","))
-            numVarsX = len(x[1].split(","))
-            print(f"numPred: {numVarsPred}, numX: {numVarsX}")
             # res is the resulting parsed raw output from ChatGPT. Any error will result in "None" being outputted.
             while(res == None):
-                rawOut, inTok, outTok = predImplication([x[0],x[2],numVarsX], [predicate[0],predicate[2],numVarsPred])
+                rawOut, inTok, outTok = predImplication([x[0:3]], [predicate[0:3]])
                 print(rawOut)
                 res = extractionFinalResult(rawOut)
                 if(res != "False"):

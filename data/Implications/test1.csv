@@ -1,0 +1,102 @@
+all y: everything | LAN[y] implies System[y]
+all x: everything | System[x] implies System[x]
+all x: everything | System[x]
+"all x: everything | (some y: everything | Reports[x, y] || Reports[y, x]) implies System[x]"
+"all x: everything, y: everything | EnabledPostAuthentication[x, y] implies System[x]"
+all y: everything | FileSystem[y] implies System[y]
+all x: everything | Host[x] implies System[x]
+"all x: everything, y: everything, z: everything | ComparesSessionStatistics[x,y,z] implies System[x]"
+"all x: everything, y: everything, z: everything | IdentifiesPattern[x, y, z] implies System[x]"
+"all x: everything, y: everything, z: everything | ComputesFrom[x, y, z] implies System[x]"
+"all x: everything | (some y: everything, z: everything | ComputesFrom[x, y, z]) implies System[x]"
+"all w: everything, x: everything | AggregatesStatistics[w, x] implies System[w]"
+"all w: everything | (some x: everything | AggregatesStatistics[w, x]) implies System[w]"
+"all w: everything, x: everything | ComputesStatistics[w, x] implies System[x]"
+"all x: everything | (some w: everything | ComputesStatistics[w, x]) implies System[x]"
+"all x: everything, y: everything, z: everything | GrantsAccess[x,y,z] implies System[x]"
+"all x: everything | (some y: everything, z: everything | GrantsAccess[x,y,z]) implies System[x]"
+"all x: everything, y: everything, z: everything | DeniesAccess[x, y, z] implies System[x]"
+"all x: everything, y: everything | Detected31[x, y] implies System[x]"
+"all x: everything, y: everything, z: everything | ExtractsFrom[x,y,z] implies System[x]"
+"all x: everything, y: everything | ComputesRatio[x, y] implies System[x]"
+"all x: everything, y: everything | Logged5[x, y] implies NetworkTraffic[y]"
+all x: everything | AnomalousCommunication[x] implies NetworkTraffic[x]
+"all x: everything, y: everything, z: everything | ComparesSessionStatistics[x,y,z] implies NetworkTraffic[y]"
+"all x: everything, y: everything | PassivelyCapturedFrom[x, y] implies NetworkTraffic[y]"
+all y: everything | NetworkSessionData[y] implies NetworkTraffic[y]
+"all x: everything, y: everything, z: everything | DeniesAccess[x, y, z] implies NetworkTraffic[y]"
+"all x: everything, y: everything | ComputesRatio[x, y] implies NetworkTraffic[y]"
+"all y: everything | (some x: everything | AllowedConnection[x, y]) implies Routable[y]"
+"all x: everything, y: everything | Reports[x,y] implies Routable[y]"
+"all y: everything | (some x: everything | Reports[x,y]) implies Routable[y]"
+"all x: everything, y: everything | EnabledPostAuthentication[x, y] implies Routable[y]"
+all y: everything | RoutingPath[y] implies Routable[y]
+all x: everything | AnomalousCommunication[x] implies Routable[x]
+"all x: everything, y: everything, z: everything | ComparesSessionStatistics[x,y,z] implies Routable[y]"
+all y: everything | Source[y] implies Routable[y]
+"all y: everything | (some x: everything | PolicyAllows[x, y]) implies Routable[y]"
+"all x: everything, y: everything | Interacts[x,y] implies Routable[y]"
+"all y: everything | (some x: everything | Interacts[x,y]) implies Routable[y]"
+all y: everything | NetworkSessionData[y] implies Routable[y]
+"all x: everything, y: everything, z: everything | ComputesFrom[x, z, y] implies Routable[y]"
+"all y: everything | (some x: everything, z: everything | ComputesFrom[x, z, y]) implies Routable[y]"
+"all x: everything, y: everything, z: everything | GrantsAccess[x, y, z] implies Routable[y]"
+"all y: everything | (some x: everything, z: everything | GrantsAccess[x, y, z]) implies Routable[y]"
+"all x: everything, y: everything | Detected31[x, y] implies Routable[y]"
+"all x: everything, y: everything, z: everything | ExtractsFrom[x, y, z] implies Routable[y]"
+"all x: everything, y: everything | ComputesRatio[x, y] implies Routable[y]"
+"all x: everything | ExceptionHandler[x] implies (some w: everything | Has[w, x])"
+"all x: everything, y: everything | Reports[x, y] implies Has[y, x]"
+"all x: everything, y: everything | Logged5[x, y] implies Has[y, x]"
+"all y: everything, x: everything | Detected[y, x] implies Has[y, x]"
+"all x: everything | AnomalousCommunication[x] implies (some w: everything | Has[w, x])"
+"all x: everything, y: everything, z: everything | ComparesSessionStatistics[x, y, z] implies (Has[x, y] && Has[x, z])"
+"all x: everything, y: everything | PassivelyCapturedFrom[x, y] implies Has[y, x]"
+"all x: everything | FileCreateSystemCall[x] implies (some w: everything | Has[w, x])"
+"all w: everything, x: everything | AggregatesStatistics[w, x] implies Has[w, x]"
+"all w: everything, x: everything | ComputesStatistics[w, x] implies Has[w, x]"
+"all x: everything, y: everything, z: everything | GrantsAccess[x, y, z] implies Has[z, y]"
+"all x: everything, y: everything, z: everything | ExtractsFrom[x, y, z] implies Has[x, y]"
+all x: everything | File[x] implies File[x]
+all x: everything | Log[x] implies File[x]
+"all x: everything, y: everything | SourceOfConversion[y, x] implies File[x]"
+"all x: everything, z: everything | TargetOfConversion[z, x] implies File[x]"
+all z: everything | ObservedPayload[z] implies File[z]
+"all w: everything, x: everything | ConsistentWithFileData[w, x] implies File[x]"
+all x: everything | Certificate[x] implies File[x]
+all x: everything | PropertiesExtracted[x] implies File[x]
+all y: everything | Regular[y] implies File[y]
+all w: everything | Extracted[w] implies File[w]
+all y: everything | SourceFormat[y] implies Format[y]
+"all y: everything, x: everything | SourceOfConversion[y, x] implies Format[y]"
+"all y: everything, x: everything | SourceOfConversion[y, x] implies Format[x]"
+all z: everything | TargetFormat[z] implies Format[z]
+"all z: everything, x: everything | TargetOfConversion[z, x] implies Format[z]"
+"all x: everything, y: everything | DoesNotConformToSchema[x,y] implies Format[y]"
+all x: everything | PropertiesExtracted[x] implies Format[x]
+"all y: everything | (some z: everything | Matches[y, z]) implies ContentScanningEngine[y]"
+"all y: everything, x: everything | Detected[y,x] implies ContentScanningEngine[y]"
+"all y: everything, z: everything | Matches[y, z] implies InFormat[y, z]"
+"all x: everything | URL[x] implies InFormat[x, URL]"
+"all z: everything, x: everything | GeneratedBy[z, x] implies InFormat[z, x]"
+"all w: everything, x: everything | RuleAppliedTo[w,x] implies InFormat[w,x]"
+"all w: everything, x: everything | Checked[w,x] implies InFormat[w,x]"
+"all w: everything, x: everything | ConsistentWithFileData[w, x] implies InFormat[w, x]"
+"all y: everything | FileSystem[y] implies (InFormat[y, y])"
+"all y: everything, z: everything | Matches[y, z] implies CanParseAndInspect[y, z]"
+"all x: everything, y: everything, z: everything | RecordedInLog[x, y, z] implies CanParseAndInspect[y, x]"
+"all x: everything, y: everything | URL[x] implies CanParseAndInspect[y,x]"
+"all y: everything, x: everything | AssignedTo[y,x] implies CanParseAndInspect[y,x]"
+"all y: everything | MatchFoundBy[y] implies (some x: everything | CanParseAndInspect[x,y])"
+"all w: everything, x: everything | RuleAppliedTo[w, x] implies CanParseAndInspect[w, x]"
+"all x: everything, y: everything | Reports[x, y] implies CanParseAndInspect[y, x]"
+"all x: everything, y: everything | EnabledPostAuthentication[x, y] implies CanParseAndInspect[y, x]"
+"all y: everything, x: everything | Detected[y, x] implies CanParseAndInspect[y, x]"
+"all x: everything, y: everything, z: everything | ExtractsFeatureFrom[x, y, z] implies CanParseAndInspect[y, x]"
+"all w: everything, x: everything | ConsistentWithFileData[w,x] implies CanParseAndInspect[w,x]"
+"all x: everything | ScriptAnalysisResult[x] implies (some y: everything | CanParseAndInspect[y, x])"
+"all x: everything | PropertiesAnalyzed[x] implies (some y: everything | CanParseAndInspect[y, x])"
+"all y: everything, x: everything | ProcessingEnvironment[y] implies CanParseAndInspect[y, x]"
+"all x: everything, y: everything, z: everything | GrantsAccess[z, y, x] implies CanParseAndInspect[y, x]"
+"all x: everything | AnalysisTool[x] implies (some y: everything | CanParseAndInspect[y, x])"
+"all x: everything | AnalysisTool[x] implies CanParseAndInspect[x, x]"
