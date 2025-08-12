@@ -39,25 +39,17 @@ def cosSimPrecon(i,cosSim):
     postPreds = [[x for j in SimPostInds for x in PostUnified[j][2]], [x for j in SimPostInds for x in PostUnified[j][3]], [x for j in SimPostInds for x in PostUnified[j][4]],[x for j in SimPostInds for x in PostUnified[j][5]]]
     print(f"# postcondition predicates: {len(postPreds[0])}")
 
-    # Embed the cleaned descriptions
-    embPost, costPost = getEmbeds(postPreds[3])
-    embPre, costPre = getEmbeds(prePreds[3])
-
-    # Create the cosine similarity matrix
-    CosMatrix = cosine_similarity(embPre,embPost) #rows = post, cols = pre
-    print(np.min(CosMatrix))
-
-    # Set a low threshold of 0.13
-    CosMatrix[(CosMatrix <= 0.13)] = 0
-
-    df = pd.DataFrame(CosMatrix, index=prePreds[3], columns=postPreds[3])
-    df.to_csv(f"zcosSimMsPred/CosSimTest{i}.(S3).csv")
-
-    return np.sum(CosMatrix == 0)/CosMatrix.size, len(CosMatrix[0]), costPost + costPre
-
+# deleted
 
 
     # S3 -- IMPLICATIONS
+    allAsserts = []         # All Alloy assertions
+    dictNoRepeats = {}      # Dictionary with postconditions that have implied the precondition
+    totalInToks = 0
+    totalOutToks = 0
+    for pred in prePreds:
+        asserts, intoks, outtoks = findAssertions(pred, postPreds, dictNoRepeats)
+        allAsserts.extend(asserts)
 
     
 
