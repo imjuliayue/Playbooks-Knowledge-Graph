@@ -33,7 +33,10 @@ def cosSimPrecon(i,cosSim, dictNoRepeats):
     print(f"# similar postconditions: {len(SimPostInds)}")
 
     # Collect all of the predicate names, variables, descriptions, and cleaned descriptions
-    prePreds = PreUnified[i][2:6]
+    allPrePreds = PreUnified[i][2:6]
+
+    # turn `allPrePreds` to the form [[predname, predvars, preddescr, preddescrcleaned]]
+    prePreds = [[allPrePreds[0][i],allPrePreds[1][i],allPrePreds[2][i],allPrePreds[3][i]] for i in range(len(allPrePreds[2]))]
     print(prePreds)
 
     # FOR EMBEDDINGS: ----------------
@@ -43,7 +46,7 @@ def cosSimPrecon(i,cosSim, dictNoRepeats):
 
     # really bad way of getting all [[predname, predvars, preddescr, preddescrcleaned]]
     postPreds = [[PostUnified[j][2][i],PostUnified[j][3][i],PostUnified[j][4][i],PostUnified[j][5][i]] for j in SimPostInds for i in range(len(PostUnified[j][2]))]
-    print(postPreds)
+    print(postPreds[0])
 
 
     # S3 -- IMPLICATIONS
