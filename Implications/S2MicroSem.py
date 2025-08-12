@@ -62,12 +62,28 @@ def cosSimPrecon(i,cosSim, dictNoRepeats):
     return allAsserts, totalInToks, totalOutToks, dictNoRepeats
 
 dictNoRepeats = {}
-asserts, intoks, outtoks, dictNoRepeats = cosSimPrecon(0, cosSim[0], dictNoRepeats)
+allAsserts = []
 
-print(f"asserts: {asserts}")
-print(f"intoks: {intoks}")
-print(f"outtoks: {outtoks}")
+savePkl("Implications","testDict",dictNoRepeats)
+savePkl("Implications","test",allAsserts)
+totalInToks = 0
+totalOutToks = 0
+
+for i in range(0,10):
+    asserts, intoks, outtoks, dictNoRepeats = cosSimPrecon(i, cosSim[i], dictNoRepeats)
+    allAsserts.extend(asserts)
+    savePkl("Implications",f"testDict{i}",dictNoRepeats)
+    savePkl("Implications",f"test{i}",allAsserts)
+    totalInToks += intoks
+    totalOutToks += outtoks
+
+print(f"asserts: {allAsserts}")
+print(f"intoks: {totalInToks}")
+print(f"outtoks: {totalOutToks}")
 print(f"dict: {dictNoRepeats}")
+savePkl("Implications","AllAsserts(0-9)",allAsserts)
+savePkl("Implications","Alldictionary(0-9)",dictNoRepeats)
+savePkl("Implications", "Alltokens(0-9)", [totalInToks,totalOutToks])
 # nonRetention, postP, tokens = 0,0,0
 # for i in range(50):
 #     ret, p, t = cosSimPrecon(i, cosSim[i])
