@@ -23,43 +23,6 @@ cosSim = pd.read_csv('CosSim0.27.csv', skiprows=0, index_col=0).to_numpy().T
 
 totalEmbedTok = 0
 
-def extractionFinalResult(output):
-    # Returns None if the extraction does not contain "ANSWER:"
-    x = output.split("ANSWER:")
-    if(len(x) < 2):
-       print("retry (no 'ANSWER:')")
-       return None
-    if("True" in x[-1]):
-        x = x[-1].split("EXPRESSIONS:")
-        if(len(x) < 2):
-            print("true but (no 'EXPRESSION:')")
-            return None
-        return x[1].strip("\n")
-    return "False"
-
-def findAssertions(predicate, axioms, dictionary):
-    # NOTE: HOW TO KEEP TRACK? 
-
-    totalIn, totalOut = 0,0
-    asserts = []
-    # Get independent implications one by one.
-    for x in axioms:
-        res = None
-        if(dictionary.get(x[0]) == None or predicate[0] in dictionary.get(x[0])):
-            print(f"{predicate[0]} not in dictionary for {x[0]}")
-            dictionary.get(x[0]).append(predicate[0])
-            # res is the resulting parsed raw output from ChatGPT. Any error will result in "None" being outputted.
-            while(res == None):
-                rawOut, inTok, outTok = predImplication(predicate, x)
-                res = extractionFinalResult(rawOut)
-                if(res != "False"):
-                    asserts.append(res)
-                # Keep track of token count
-                totalIn += inTok
-                totalOut += outTok
-    return asserts, totalIn, totalOut
-
-
 # FINDS POSTCONDITION PREDICATES IMPLYING PRECONDITION PREDICATES
 def cosSimPrecon(i,cosSim):
     # i = index of PostDI of precondition
