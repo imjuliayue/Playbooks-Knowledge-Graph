@@ -46,7 +46,7 @@ def predImplication(axiom, pred):
                         2) A theorem predicate with: Predicate name, Natural-language description, Number of variables it takes (arity)
 
                         Your task:
-                        Determine whether the axiom predicate implies the theorem predicate. For example, the implication is true if the axiom is part of the set represented by the theorem.
+                        Determine whether the axiom predicate implies the theorem predicate. Begin by stating your goal: "Does <axiom> imply <theorem>" (without necessarily using the given variables)?
                         Assume the natural-language descriptions reflect real-world meanings.
                         Use common-sense reasoning to connect axioms to the theorem whenever plausible, even if the connection is not explicitly stated.
                         Only output "False." if there is truly no reasonable conceptual bridge from the axioms to the theorem.
@@ -64,13 +64,13 @@ def predImplication(axiom, pred):
                         A short reasoning section describing the hypothesized link between axioms and theorem.
                         FINAL ANSWER: followed by either "True." or "False."
                         If "True.", then immediately after, output:
-                        EXPRESSIONS: a JSON array of one or more valid Alloy expressions that represent the logical implication from axioms to theorem.
+                        EXPRESSIONS: a JSON array of one or more valid Alloy expressions that represent one or more logical implication from axioms to theorem.
 
                         Example output for a True case:
                         FINAL ANSWER:
                         True.
                         EXPRESSIONS:
-                        ["(all x: everything | isHardware[x] implies isRecorded[x]) implies (some y: everything | HardwareInventory[y])"]
+                        ["all x: everything, y: everything | isSoftwareComponentFor[x,y] implies isSystemComponent[y]", "all x: everything | (some y: everything | isSoftwareComponentFor[x,y] implies isSystemComponent[x])"]
 
                         Example output for a False case:
                         FINAL ANSWER:
@@ -79,7 +79,8 @@ def predImplication(axiom, pred):
 
                         Prefer "True." whenever a reasonable real-world interpretation makes the theorem follow from the axioms.
                         "False." should only be used if no logical path exists even with generous interpretation of the descriptions.
-                        Alloy expressions must be syntactically valid and executable in Alloy Analyzer without modification.
+                        Alloy expressions must be syntactically valid and executable in Alloy Analyzer without modification
+                        There may be more than one expression that can represent an implication! Depending on how you represent the variables and quantifers.
                         '''
       },
       {
@@ -174,52 +175,32 @@ def findAssertions(predicate, axioms, dictionary):
     # Get independent implications one by one.
     for x in axioms:
         res = None
-        if(dictionary.get(x[0]) == None or predicate[0] in dictionary.get(x[0])):
+        if(dictionary.get(x[0]) == None or predicate[0] not in dictionary.get(x[0])):
             print(f"{predicate[0]} not in dictionary for {x[0]}")
-            dictionary.get(x[0]).append(predicate[0])
+            if(dictionary.get(x[0]) == None):
+               dictionary[x[0]] = []
+            dictionary[x[0]].append(predicate[0])
+            numVarsPred = len(predicate[1].split(","))
+            numVarsX = len(x[1].split(","))
+            print(f"numPred: {numVarsPred}, numX: {numVarsX}")
             # res is the resulting parsed raw output from ChatGPT. Any error will result in "None" being outputted.
             while(res == None):
-                rawOut, inTok, outTok = predImplication(predicate, x)
+                rawOut, inTok, outTok = predImplication([x[0],x[2],numVarsX], [predicate[0],predicate[2],numVarsPred])
+                print(rawOut)
                 res = extractionFinalResult(rawOut)
                 if(res != "False"):
-                    asserts.append(res)
+                    try:
+                      lst= ast.literal_eval(res)
+                      asserts.extend(lst)
+                    except (SyntaxError, ValueError):
+                      print("didn't work...")
+                      res = None
                 # Keep track of token count
                 totalIn += inTok
                 totalOut += outTok
+        else:
+          print(f"{predicate[0]} already in dictionary for {x[0]}")
     return asserts, totalIn, totalOut
-
-
-# FINDS POSTCONDITION PREDICATES IMPLYING PRECONDITION PREDICATES
-def cosSimPrecon(i,cosSim):
-    # i = index of PostDI of precondition
-    # cosSim = the np cosine similarity vector for that precondition
-
-    # Set up (find similar postcondition inds)
-    SimPostInds = np.where(cosSim > 0)[0]
-    print(f"# similar postconditions: {len(SimPostInds)}")
-
-    # Collect all of the predicate names, variables, descriptions, and cleaned descriptions
-    prePreds = PreUnified[i][2:6]
-    print(prePreds)
-
-    postPreds = [[x for j in SimPostInds for x in PostUnified[j][2]], [x for j in SimPostInds for x in PostUnified[j][3]], [x for j in SimPostInds for x in PostUnified[j][4]],[x for j in SimPostInds for x in PostUnified[j][5]]]
-    print(f"# postcondition predicates: {len(postPreds[0])}")
-
-    # Embed the cleaned descriptions
-    embPost, costPost = getEmbeds(postPreds[3])
-    embPre, costPre = getEmbeds(prePreds[3])
-
-    # Create the cosine similarity matrix
-    CosMatrix = cosine_similarity(embPre,embPost) #rows = post, cols = pre
-    print(np.min(CosMatrix))
-
-    # Set a low threshold of 0.13
-    CosMatrix[(CosMatrix <= 0.13)] = 0
-
-    df = pd.DataFrame(CosMatrix, index=prePreds[3], columns=postPreds[3])
-    df.to_csv(f"zcosSimMsPred/CosSimTest{i}.(S3).csv")
-
-    return np.sum(CosMatrix == 0)/CosMatrix.size, len(CosMatrix[0]), costPost + costPre
 
 # EMBEDDINGS (STEP 1-2) --------------------------------
 

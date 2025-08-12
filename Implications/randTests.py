@@ -1,21 +1,12 @@
 import pandas as pd
 import numpy as np
 from implicationFunctions import *
-from S2MicroSem import *
 
-testAx = ["isSoftware","x is a software component", 1]
+testAx = [["isSoftwareFor","x,y","x is a software component for y", "is a software component for"],["isSoftware","x","x is a software component", "is a software component"], ["isSoftware", "x", "x is a software component"]]
 
-testT = ["isSystem", "y is a system component", 1]
+testT = ["isSystem", "y", "y is a system component", "is a system component"]
 
-imp = predImplication(testAx, testT)
-print(f"output: {imp[0]}")
-print(f"input tokens: {imp[1]}")
-print(f"output tokens: {imp[2]}")
-
-print("extracting...")
-
-extracted = extractionFinalResult(imp[0])
-print(extracted)
+print(findAssertions(testT, testAx, {}))
 
 # CM = pd.read_csv("CosSimTest(S3).csv",header=None).to_numpy()
 
