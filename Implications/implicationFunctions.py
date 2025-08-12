@@ -46,7 +46,8 @@ def predImplication(axiom, pred):
                         2) A theorem predicate with: Predicate name, Natural-language description, Number of variables it takes (arity)
 
                         Your task:
-                        Determine whether the axiom predicate implies the theorem predicate. Begin by stating your goal: "Does <axiom description> imply <theorem description>" (without necessarily using the given variables)?
+                        Determine whether the axiom predicate implies the theorem predicate. Begin by stating your goal: "Does <axiom description> imply <theorem description>"? Replace each variable with enumerations.
+                          For example, if axiom was "x interacts with y" and theorm was "t denies x", you would begin with "Does <1> interacts with <2>" imply "<3> denies <4>"? You are free to replace the enumerations with whatever variables make most sense. 
                         Assume the natural-language descriptions reflect real-world meanings.
                         Use common-sense reasoning to connect axioms to the theorem whenever plausible, even if the connection is not explicitly stated.
                         Only output "False." if there is truly no reasonable conceptual bridge from the axioms to the theorem.
