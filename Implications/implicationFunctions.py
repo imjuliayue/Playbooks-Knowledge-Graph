@@ -17,7 +17,7 @@ import pickle as pkl
 import ast
 # -----------------------------------------
 
-# FUNCTIONS --------------------------------
+# PREDICATE IMPLICATION DETERMINATION (STEP 3) --------------------------------
 
 # OPEN AI CLIENT
 load_dotenv()
@@ -46,10 +46,10 @@ def predImplication(axiom, pred):
                         2) A theorem predicate with: Predicate name, Natural-language description, Number of variables it takes (arity)
 
                         Your task:
+                        Determine whether the axiom predicate implies the theorem predicate. For example, the implication is true if the axiom is part of the set represented by the theorem.
                         Assume the natural-language descriptions reflect real-world meanings.
-                        Hypothesize reasonable logical relationships between the predicates based on these meanings.
                         Use common-sense reasoning to connect axioms to the theorem whenever plausible, even if the connection is not explicitly stated.
-                        Only output "False." if there is truly no reasonable conceptual bridge from any combination of axioms to the theorem.
+                        Only output "False." if there is truly no reasonable conceptual bridge from the axioms to the theorem.
 
                         Formalization rules:
                         All final expressions must be valid Alloy syntax.
@@ -71,8 +71,8 @@ def predImplication(axiom, pred):
                         True.
                         EXPRESSIONS:
                         ["(all x: everything | isHardware[x] implies isRecorded[x]) implies (some y: everything | HardwareInventory[y])"]
-                        Example output for a False case:
 
+                        Example output for a False case:
                         FINAL ANSWER:
                         False.
                         Important:
@@ -124,6 +124,7 @@ def predImplicationConjunction(axiom, pred):
                         FINAL ANSWER: followed by either "True." or "False."
                         If "True.", then immediately after, output:
                         EXPRESSION: the Alloy expression that represents the logical implication from axiom to theorem.
+                        If "False.", then do not follow it with anything else.
 
                         Example output for a True case:
                         FINAL ANSWER:
@@ -150,7 +151,77 @@ def predImplicationConjunction(axiom, pred):
 
   return  response.choices[0].message.content, response.usage.prompt_tokens, response.usage.completion_tokens
 
-# FUNCTIONS --------------------------------
+
+def extractionFinalResult(output):
+    # Returns None if the extraction does not contain "ANSWER:"
+    x = output.split("ANSWER:")
+    if(len(x) < 2):
+       print("retry (no 'ANSWER:')")
+       return None
+    if("True" in x[-1]):
+        x = x[-1].split("EXPRESSIONS:")
+        if(len(x) < 2):
+            print("true but (no 'EXPRESSION:')")
+            return None
+        return x[1].strip("\n")
+    return "False"
+
+def findAssertions(predicate, axioms, dictionary):
+    # NOTE: HOW TO KEEP TRACK? 
+
+    totalIn, totalOut = 0,0
+    asserts = []
+    # Get independent implications one by one.
+    for x in axioms:
+        res = None
+        if(dictionary.get(x[0]) == None or predicate[0] in dictionary.get(x[0])):
+            print(f"{predicate[0]} not in dictionary for {x[0]}")
+            dictionary.get(x[0]).append(predicate[0])
+            # res is the resulting parsed raw output from ChatGPT. Any error will result in "None" being outputted.
+            while(res == None):
+                rawOut, inTok, outTok = predImplication(predicate, x)
+                res = extractionFinalResult(rawOut)
+                if(res != "False"):
+                    asserts.append(res)
+                # Keep track of token count
+                totalIn += inTok
+                totalOut += outTok
+    return asserts, totalIn, totalOut
+
+
+# FINDS POSTCONDITION PREDICATES IMPLYING PRECONDITION PREDICATES
+def cosSimPrecon(i,cosSim):
+    # i = index of PostDI of precondition
+    # cosSim = the np cosine similarity vector for that precondition
+
+    # Set up (find similar postcondition inds)
+    SimPostInds = np.where(cosSim > 0)[0]
+    print(f"# similar postconditions: {len(SimPostInds)}")
+
+    # Collect all of the predicate names, variables, descriptions, and cleaned descriptions
+    prePreds = PreUnified[i][2:6]
+    print(prePreds)
+
+    postPreds = [[x for j in SimPostInds for x in PostUnified[j][2]], [x for j in SimPostInds for x in PostUnified[j][3]], [x for j in SimPostInds for x in PostUnified[j][4]],[x for j in SimPostInds for x in PostUnified[j][5]]]
+    print(f"# postcondition predicates: {len(postPreds[0])}")
+
+    # Embed the cleaned descriptions
+    embPost, costPost = getEmbeds(postPreds[3])
+    embPre, costPre = getEmbeds(prePreds[3])
+
+    # Create the cosine similarity matrix
+    CosMatrix = cosine_similarity(embPre,embPost) #rows = post, cols = pre
+    print(np.min(CosMatrix))
+
+    # Set a low threshold of 0.13
+    CosMatrix[(CosMatrix <= 0.13)] = 0
+
+    df = pd.DataFrame(CosMatrix, index=prePreds[3], columns=postPreds[3])
+    df.to_csv(f"zcosSimMsPred/CosSimTest{i}.(S3).csv")
+
+    return np.sum(CosMatrix == 0)/CosMatrix.size, len(CosMatrix[0]), costPost + costPre
+
+# EMBEDDINGS (STEP 1-2) --------------------------------
 
 # OPEN AI CLIENT
 load_dotenv()
@@ -184,7 +255,7 @@ def getEmbeds(values):
     embeds.append(embed)
   return np.array(embeds), totalToks
 
-# ---
+# FILE SAVING -------------------------------------------------------
 
 def saveData(path, name, data):
   # path is the path to save the data to (can include '../'), W.R.T. WHERE RUNNING SCRIPT
