@@ -24,7 +24,7 @@ cosSim = pd.read_csv('CosSim0.27.csv', skiprows=0, index_col=0).to_numpy().T
 totalEmbedTok = 0
 
 # FINDS POSTCONDITION PREDICATES IMPLYING PRECONDITION PREDICATES
-def cosSimPrecon(i,cosSim):
+def cosSimPrecon(i,cosSim, dictNoRepeats):
     # i = index of PostDI of precondition
     # cosSim = the np cosine similarity vector for that precondition
 
@@ -36,23 +36,35 @@ def cosSimPrecon(i,cosSim):
     prePreds = PreUnified[i][2:6]
     print(prePreds)
 
-    postPreds = [[x for j in SimPostInds for x in PostUnified[j][2]], [x for j in SimPostInds for x in PostUnified[j][3]], [x for j in SimPostInds for x in PostUnified[j][4]],[x for j in SimPostInds for x in PostUnified[j][5]]]
-    print(f"# postcondition predicates: {len(postPreds[0])}")
+    # FOR EMBEDDINGS: ----------------
+    # postPreds = [[x for j in SimPostInds for x in PostUnified[j][2]], [x for j in SimPostInds for x in PostUnified[j][3]], [x for j in SimPostInds for x in PostUnified[j][4]],[x for j in SimPostInds for x in PostUnified[j][5]]]
+    # print(f"# postcondition predicates: {len(postPreds[0])}")
+    #  -------------------------------
 
-# deleted
+    # really bad way of getting all [[predname, predvars, preddescr, preddescrcleaned]]
+    postPreds = [[PostUnified[j][2][i],PostUnified[j][3][i],PostUnified[j][4][i],PostUnified[j][5][i]] for j in SimPostInds for i in range(len(PostUnified[j][2]))]
+    print(postPreds)
 
 
     # S3 -- IMPLICATIONS
     allAsserts = []         # All Alloy assertions
-    dictNoRepeats = {}      # Dictionary with postconditions that have implied the precondition
     totalInToks = 0
     totalOutToks = 0
     for pred in prePreds:
         asserts, intoks, outtoks = findAssertions(pred, postPreds, dictNoRepeats)
         allAsserts.extend(asserts)
-
+        totalInToks += intoks
+        totalOutToks += outtoks
     
+    return allAsserts, totalInToks, totalOutToks, dictNoRepeats
 
+dictNoRepeats = {}
+asserts, intoks, outtoks, dictNoRepeats = cosSimPrecon(0, cosSim[0], dictNoRepeats)
+
+print(f"asserts: {asserts}")
+print(f"intoks: {intoks}")
+print(f"outtoks: {outtoks}")
+print(f"dict: {dictNoRepeats}")
 # nonRetention, postP, tokens = 0,0,0
 # for i in range(50):
 #     ret, p, t = cosSimPrecon(i, cosSim[i])

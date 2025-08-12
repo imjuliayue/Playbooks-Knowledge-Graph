@@ -42,11 +42,11 @@ def predImplication(axiom, pred):
           "role": "system",
           "content": f'''
                         You are given:
-                        1) A list of axiom predicates, each with: Predicate name (string), Natural-language description of its meaning, Number of variables it takes (arity)
+                        1) A SINGLE axiom predicate, each with: Predicate name (string), Natural-language description of its meaning, Number of variables it takes (arity)
                         2) A theorem predicate with: Predicate name, Natural-language description, Number of variables it takes (arity)
 
                         Your task:
-                        Determine whether the axiom predicate implies the theorem predicate. Begin by stating your goal: "Does <axiom> imply <theorem>" (without necessarily using the given variables)?
+                        Determine whether the axiom predicate implies the theorem predicate. Begin by stating your goal: "Does <axiom description> imply <theorem description>" (without necessarily using the given variables)?
                         Assume the natural-language descriptions reflect real-world meanings.
                         Use common-sense reasoning to connect axioms to the theorem whenever plausible, even if the connection is not explicitly stated.
                         Only output "False." if there is truly no reasonable conceptual bridge from the axioms to the theorem.
