@@ -174,6 +174,9 @@ def findAssertions(predicate, axioms, dictionary):
     asserts = []
     # Get independent implications one by one.
     for x in axioms:
+        if(x[0] == predicate[0]):
+           print(f"{x[0]} and {predicate[0]} are the same predicate. Skipping...")
+           continue
         res = None
         if(dictionary.get(x[0]) == None or predicate[0] not in dictionary.get(x[0])):
             print(f"{predicate[0]} not in dictionary for {x[0]}")

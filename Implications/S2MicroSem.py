@@ -53,7 +53,15 @@ def cosSimPrecon(i,cosSim, dictNoRepeats):
     allAsserts = []         # All Alloy assertions
     totalInToks = 0
     totalOutToks = 0
+
+    # between precondition predicates and postcondition predicates
     for pred in prePreds:
+        asserts, intoks, outtoks = findAssertions(pred, postPreds, dictNoRepeats)
+        allAsserts.extend(asserts)
+        totalInToks += intoks
+        totalOutToks += outtoks
+    
+    for pred in postPreds:
         asserts, intoks, outtoks = findAssertions(pred, postPreds, dictNoRepeats)
         allAsserts.extend(asserts)
         totalInToks += intoks
