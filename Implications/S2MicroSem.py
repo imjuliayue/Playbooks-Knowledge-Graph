@@ -24,7 +24,7 @@ cosSim = pd.read_csv('CosSim0.27.csv', skiprows=0, index_col=0).to_numpy().T
 totalEmbedTok = 0
 
 # FINDS POSTCONDITION PREDICATES IMPLYING PRECONDITION PREDICATES
-def cosSimPrecon(i,cosSim, dictNoRepeats):
+def cosSimPrecon(i,cosSim, dictNoRepeats, PostUnified, PreUnified):
     # i = index of PostDI of precondition
     # cosSim = the np cosine similarity vector for that precondition
 
@@ -40,8 +40,12 @@ def cosSimPrecon(i,cosSim, dictNoRepeats):
     print(prePreds)
 
     # FOR EMBEDDINGS: ----------------
-    # postPreds = [[x for j in SimPostInds for x in PostUnified[j][2]], [x for j in SimPostInds for x in PostUnified[j][3]], [x for j in SimPostInds for x in PostUnified[j][4]],[x for j in SimPostInds for x in PostUnified[j][5]]]
-    # print(f"# postcondition predicates: {len(postPreds[0])}")
+    postPreds = [[x for j in SimPostInds for x in PostUnified[j][2]], [x for j in SimPostInds for x in PostUnified[j][3]], [x for j in SimPostInds for x in PostUnified[j][4]],[x for j in SimPostInds for x in PostUnified[j][5]]]
+    print(f"# postcondition predicates: {len(postPreds[0])}")
+    print(postPreds[3])
+    postEmbs, _ = getEmbeds(postPreds[3])
+    matrix = cosine_similarity(postEmbs,postEmbs)
+    matrix[matrix < 0.35] = 0
     #  -------------------------------
 
     # really bad way of getting all [[predname, predvars, preddescr, preddescrcleaned]]
@@ -61,8 +65,11 @@ def cosSimPrecon(i,cosSim, dictNoRepeats):
         totalInToks += intoks
         totalOutToks += outtoks
     
-    for pred in postPreds:
-        asserts, intoks, outtoks = findAssertions(pred, postPreds, dictNoRepeats)
+    for i,pred in enumerate(postPreds,0):
+        indices = np.where(matrix[i] != 0)[0]
+        print(indices)
+        simPostPreds = [postPreds[i] for i in indices]
+        asserts, intoks, outtoks = findAssertions(pred, simPostPreds, dictNoRepeats)
         allAsserts.extend(asserts)
         totalInToks += intoks
         totalOutToks += outtoks
@@ -75,18 +82,22 @@ allAsserts = []
 totalInToks = 0
 totalOutToks = 0
 
-for i in range(0,2):
-    asserts, intoks, outtoks, dictNoRepeats = cosSimPrecon(i, cosSim[i], dictNoRepeats)
-    allAsserts.extend(asserts)
-    savePkl("Implications",f"testDict2{i}",dictNoRepeats)
-    savePkl("Implications",f"test2{i}",allAsserts)
-    totalInToks += intoks
-    totalOutToks += outtoks
+# for i in range(0,2):
+    
+#     asserts, intoks, outtoks, dictNoRepeats = cosSimPrecon(i, cosSim[i], dictNoRepeats)
+#     allAsserts.extend(asserts)
+#     savePkl("Implications",f"testDict2{i}",dictNoRepeats)
+#     savePkl("Implications",f"test2{i}",allAsserts)
+#     totalInToks += intoks
+#     totalOutToks += outtoks
 
-print(f"asserts: {allAsserts}")
-print(f"intoks: {totalInToks}")
-print(f"outtoks: {totalOutToks}")
-print(f"dict: {dictNoRepeats}")
+# print(f"asserts: {allAsserts}")
+# print(f"intoks: {totalInToks}")
+# print(f"outtoks: {totalOutToks}")
+# print(f"dict: {dictNoRepeats}")
+
+#  ------------------------------- UNCOMMENT ABOVE
+
 # savePkl("Implications","AllAsserts(0-9)",allAsserts)
 # savePkl("Implications","Alldictionary(0-9)",dictNoRepeats)
 # savePkl("Implications", "Alltokens(0-9)", [totalInToks,totalOutToks])
