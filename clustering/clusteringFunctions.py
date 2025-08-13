@@ -288,3 +288,34 @@ def replace_pred_with_cluster_names(file_path, file_name, cluster_name_dict, sav
     new_predicate_data[i][4] = replacement_pred_descr
   modified_savePkl(save_file_path, save_file_name, new_predicate_data)
   saveData(save_file_path, save_file_name, new_predicate_data)
+
+# ---
+
+def get_unique_clusters(clusters_file_path, clusters_file_name):
+  cluster_dict = dict()
+  cluster_names_list = []
+  cluster_descr_list = []
+  clusters_list = loadData(clusters_file_path, clusters_file_name)
+  # index 0 has row of headers
+  for i in range(1, len(clusters_list)):
+    cluster_name = clusters_list[i][5]
+    cluster_descr = clusters_list[i][6]
+    
+    # dictionary of all unique clusters
+    if cluster_name not in cluster_dict:
+      cluster_dict[cluster_name] = cluster_descr
+      cluster_names_list.append(cluster_name)
+      cluster_descr_list.append(cluster_descr)
+  return cluster_dict, cluster_names_list, cluster_descr_list
+
+# ---
+
+def output_unique_clusters_to_csv(cluster_names_list, cluster_descr_list, result_file_name):
+  csv_data = []
+  for i in range(0, len(cluster_names_list)):
+    cluster_name = cluster_names_list[i]
+    cluster_descr = cluster_descr_list[i]
+    csv_data.append([cluster_name, cluster_descr])
+
+  output_df = pd.DataFrame(csv_data, columns=['cluster_name', 'cluster_description'])
+  output_df.to_csv(f'{result_file_name}.csv', index=False)
